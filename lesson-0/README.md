@@ -58,5 +58,3 @@ Go through the options and look at what you're able to do. Some of the coolest o
 * Code Menu Bar -> Inspect Code - Will analyze your code and show you possible bugs, issues, style issues, or spelling errors!
 
 * Command (or Win) + Alt + T - Surround selected code with a conditional (if, while, func, etc)
-
-* 
