@@ -1,0 +1,37 @@
+extends layout
+
+block content
+    script.
+        function submitPost(name, comment) {
+            console.log(comment)
+            fetch(`/dogs/${name}/comment`, {
+                method: 'POST',
+                body: JSON.stringify({ comment }),
+            });
+        }
+
+    div.header
+        li My Subreddits
+        li r/jonluca
+    div.main
+        div.banner
+            img(src='../images/background.jpg')
+        div.title
+            img(src='//b.thumbs.redditmedia.com/Sgqw1zW5DO9gHEOhJtVxS_hC7pIzOoRgokC-xqfUmWI.png')
+            h1 /r/dogs
+        div.post-body
+            div.vote-container
+                img(src='../images/up-arrow.svg', onclick=`handleClick(this, "${dog.name}", "POST")`)
+                p= dog.rating
+                img(src='../images/down-arrow.svg', onclick=`handleClick(this, "${dog.name}", "DELETE")`)
+            div.post-content
+                img(src=dog.imageUrl)
+        div.comment-section
+            form(action=`/dogs/${dog.name}/comment`, id='form', method="POST")
+                div.write-comment
+                    h1 all #{dog.comments.length} comments:
+                    p Reminder: everytime you write a vulgar comment a little puppy dies
+                    textarea(id='comment', name='comment')
+                button(type="submit", form='form') Save
+                each comment in dog.comments
+                    div.comment comment

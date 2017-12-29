@@ -40,6 +40,17 @@ a {
     max-height: 300px;
 }
 
+.title {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    margin: 0 20px;
+}
+
+.title > img {
+    margin-right: 15px;
+}
+
 .list-view {
     margin: 0 30px;
 }
@@ -52,11 +63,14 @@ a {
     color: #3E6595;
 }
 
-.list-item > h1 {
+.list-item > a {
     margin-left: 50px;
+    font-size:  24px;
+    text-decoration: none;
+    color: #3E6595;
 }
 
-.list-item > h1:hover {
+.list-item > a:hover {
     cursor: pointer;
 }
 
@@ -87,3 +101,34 @@ a {
 .vote-container > p {
     text-align: center;
 }
+
+
+.post-body {
+    margin: 10px 50px;
+    display: flex;
+    background-color: #F0F3FC;
+}
+
+.post-content {
+    width: 100%;
+}
+
+.comment-section {
+    margin: 0px 50px;
+}
+
+.comment-section button {
+    margin-top: 15px;
+    width: 70px;
+}
+
+.write-comment > p {
+    color: grey;
+}
+
+.write-comment > textarea {
+    height: 20vh;
+    width: 40vw;
+}
+
+

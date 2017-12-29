@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/dogs', dogs);
+app.use('/api/dogs', dogs);
 
 mongoose.connect(credentials.mongo);
 

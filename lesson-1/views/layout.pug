@@ -5,4 +5,14 @@ html
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+    script.
+        function handleClick(el, name, method) {
+            if (method === 'POST') {
+                el.nextSibling.innerHTML = parseInt(el.nextSibling.innerHTML) + 1;
+            } else {
+                el.previousSibling.innerHTML = parseInt(el.previousSibling.innerHTML) - 1;
+            }
+
+            fetch(`/dogs/${name}/vote`, { method });
+        }
     block content

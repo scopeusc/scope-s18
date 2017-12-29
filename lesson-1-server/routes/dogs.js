@@ -51,6 +51,7 @@ router.delete('/:name/vote', (req, res) => vote(req, res, -1));
 router.post('/:name/comment', async (req, res) => {
   const { name } = req.params;
   const { comment } = req.body
+  console.log(req.body);
   if (!name) {
     res.status(400).send({ error: 'Name attribute must be provided and cannot be empty.'});
   } else if (!comment) {
