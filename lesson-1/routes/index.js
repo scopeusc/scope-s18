@@ -25,7 +25,6 @@ router.get('/:name', async (req, res) => {
   try {
     const response = await fetch(`${host}/dogs/${name}`);
     const dog = await response.json();
-    console.log(dog);
     return res.render('dog', { dog });
   } catch (e) {
     res.render('error', { error: `Unable to retrieve information about ${name}!`});
