@@ -15,7 +15,6 @@ router.get('/', async (req, res) => {
       dogs,
     });
   } catch (e) {
-    console.log('asdf')
     res.render('error', { error: 'Unable to retrieve dogs!' });
   }
 });
@@ -30,40 +29,6 @@ router.get('/:name', async (req, res) => {
     return res.render('dog', { dog });
   } catch (e) {
     res.render('error', { error: `Unable to retrieve information about ${name}!`});
-  }
-});
-
-router.post(`/dogs/:name/vote`, async (req, res) => {
-  const { name } = req.params;
-  try {
-    const response = await fetch(`${host}/dogs/${name}/vote`, { method: 'POST' });
-  } catch (e) {
-    res.render('error', { error: 'Unable to retrieve dogs!' });
-  }
-});
-
-router.post(`/dogs/:name/comment`, async (req, res) => {
-  const { comment } = req.body;
-  const { name } = req.params;
-  try {
-    const response =  await fetch(`${host}/dogs/${name}/comment`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ comment }),
-    });
-  } catch (e) {
-    res.render('error', { error: 'Unable to post comment!' });
-  }
-});
-
-router.delete(`/dogs/:name/vote`, async (req, res) => {
-  const { name } = req.params;
-  try {
-    const response = await fetch(`${host}/dogs/${name}/vote`, { method: 'DELETE' });
-  } catch (e) {
-    res.render('error', { error: 'Unable to retrieve dogs!' });
   }
 });
 

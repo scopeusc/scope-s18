@@ -3,16 +3,21 @@ extends layout
 block content
     script.
         function submitPost(name, comment) {
-            console.log(comment);
             const body = JSON.stringify({ comment });
-            console.log(body);
             fetch(`/dogs/${name}/comment`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body,
+            }).then((res) => {
+                if (res.status === 200) {
+                    location.reload();
+                } else {
+                    alert('There was an error submitting your comment.');
+                }
             });
+
         }
 
     div.header
@@ -23,7 +28,7 @@ block content
             img(src='../images/background.jpg')
         div.title
             img(src='//b.thumbs.redditmedia.com/Sgqw1zW5DO9gHEOhJtVxS_hC7pIzOoRgokC-xqfUmWI.png')
-            h1 /r/dogs
+            h1(onclick='window.location.href="/"') /r/dogs
         div.post-body
             div.vote-container
                 img(src='../images/up-arrow.svg', onclick=`handleClick(this, "${dog.name}", "POST")`)
@@ -38,4 +43,5 @@ block content
                 textarea(id='comment')
             button(onclick=`submitPost("${dog.name}", document.getElementById("comment").value)`) Save
             each comment in dog.comments
-                div.comment= comment
+                div.comment
+                    p= comment

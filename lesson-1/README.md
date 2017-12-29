@@ -40,11 +40,30 @@ yarn
 ```
 I'm not kidding this is all you have to type.
 
-## Part 2: The frontpage and post views
+### Running the project
+Make sure you are in the same directory with `package.json`.
+```
+yarn start
+```
 
-Explain how to run the automated tests for this system
+## Part 2: Understanding the project structure
 
-### Break down into end to end tests
+ - bin: Holds the `www` file, whose sole purpose is to actually run your application. Don't worry about this one.
+ - node_modules: Contains the source code of everything you `yarn add` or `npm install`
+ - public: All of your static resources to be served are contained here
+ - routes: All of your routing logic goes here (handling `POST`, `GET`, etc...)
+ - views: Where your frontend views live.
+ - app.js: The actual express app itself.
+
+## Part 3: The frontpage and post views
+
+In this project, we have already completed the frontend functionality for you and all you will be doing is writing the HTTP routes to connect the dog API to the frontend. The three files you will be modifying are:
+
+ - `app.js`
+ - `routes/index.js`
+ - `routes/dogs.js`
+
+### Making the frontpage load the dogs
 
 Explain what these tests test and why
 

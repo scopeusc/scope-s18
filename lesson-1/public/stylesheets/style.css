@@ -47,6 +47,10 @@ a {
     margin: 0 20px;
 }
 
+.title > h1:hover {
+    cursor:  pointer;
+}
+
 .title > img {
     margin-right: 15px;
 }
@@ -115,6 +119,7 @@ a {
 
 .comment-section {
     margin: 0px 50px;
+    margin-bottom: 25px;
 }
 
 .comment-section button {
@@ -131,4 +136,11 @@ a {
     width: 40vw;
 }
 
+.comment {
+    padding: 20px;
+    margin-top: 10px;
+    -webkit-box-shadow: 1px 1px 1px 1px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow:    1px 1px 1px 1px #ccc;  /* Firefox 3.5 - 3.6 */
+    box-shadow:         1px 1px 1px 1px #ccc;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+}
 
