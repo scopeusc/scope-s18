@@ -45,14 +45,14 @@ router.post(`/dogs/:name/vote`, async (req, res) => {
 router.post(`/dogs/:name/comment`, async (req, res) => {
   const { comment } = req.body;
   const { name } = req.params;
-  const body = { comment };
-  console.log(body);
   try {
     const response =  await fetch(`${host}/dogs/${name}/comment`, {
       method: 'POST',
-      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ comment }),
     });
-    console.log(await response.json())
   } catch (e) {
     res.render('error', { error: 'Unable to post comment!' });
   }

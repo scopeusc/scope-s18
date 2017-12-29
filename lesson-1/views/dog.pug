@@ -3,10 +3,15 @@ extends layout
 block content
     script.
         function submitPost(name, comment) {
-            console.log(comment)
+            console.log(comment);
+            const body = JSON.stringify({ comment });
+            console.log(body);
             fetch(`/dogs/${name}/comment`, {
                 method: 'POST',
-                body: JSON.stringify({ comment }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body,
             });
         }
 
@@ -27,11 +32,10 @@ block content
             div.post-content
                 img(src=dog.imageUrl)
         div.comment-section
-            form(action=`/dogs/${dog.name}/comment`, id='form', method="POST")
-                div.write-comment
-                    h1 all #{dog.comments.length} comments:
-                    p Reminder: everytime you write a vulgar comment a little puppy dies
-                    textarea(id='comment', name='comment')
-                button(type="submit", form='form') Save
-                each comment in dog.comments
-                    div.comment comment
+            div.write-comment
+                h1 all #{dog.comments.length} comments:
+                p Reminder: everytime you write a vulgar comment a little puppy dies
+                textarea(id='comment')
+            button(onclick=`submitPost("${dog.name}", document.getElementById("comment").value)`) Save
+            each comment in dog.comments
+                div.comment= comment
