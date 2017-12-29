@@ -1,5 +1,32 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+
+    script.
+        function handleClick(el, name, method) {
+            if (method === 'POST') {
+                el.nextSibling.innerHTML = parseInt(el.nextSibling.innerHTML) + 1;
+            } else {
+                el.previousSibling.innerHTML = parseInt(el.previousSibling.innerHTML) - 1;
+            }
+
+            fetch(`/dogs/${name}/vote`, { method });
+        }
+    div.header
+        li My Subreddits
+        li r/jonluca
+    div.main
+        div.banner
+            img(src='../images/background.jpg')
+        div.list-view
+            each dog in dogs
+                div.list-item
+
+                    div.vote-container
+                        img(src='../images/up-arrow.svg', onclick=`handleClick(this, "${dog.name}", "POST")`)
+                        p= dog.rating
+                        img(src='../images/down-arrow.svg', onclick=`handleClick(this, "${dog.name}", "DELETE")`)
+                    img(src=dog.imageUrl)
+                    h1= dog.name
+
+
