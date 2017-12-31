@@ -6,12 +6,6 @@ To get a good grasp of the basic concepts of HTTP and routing, we will be creati
 
 ## Part 1: Setup
 ### Prerequisites
-**yarn**
-
-The best Node.js package manager
-```
-npm install -g yarn
-```
 **node.js**
 Make sure to install node.js version 8.x
 
@@ -30,14 +24,13 @@ git clone https://github.com/scopeusc/scope_s18.git
 ```
 **Install dependencies**
 ```
-yarn
+npm install
 ```
-I'm not kidding this is all you have to type.
 
 ### Running the project
 Make sure you are in the same directory with `package.json`.
 ```
-yarn start
+npm start
 ```
 
 
@@ -47,7 +40,7 @@ yarn start
 ## Part 2: Understanding the project structure
 
  - bin: Holds the `www` file, whose sole purpose is to actually run your application. Don't worry about this one.
- - node_modules: Contains the source code of everything you `yarn add` or `npm install`
+ - node_modules: Contains the source code of everything you  `npm install`
  - public: All of your static resources to be served are contained here
  - routes: All of your routing logic goes here (handling `POST`, `GET`, etc...)
  - views: Where your frontend views live.
@@ -192,7 +185,7 @@ router.post(`/:name/vote`, (req, res) => {
 ```
 Notice that we only had one `.then()` because we weren't interested in the content of the body and didn't have to turn the API response into a JSON format.
 
-Since the upvote and downvote share the same endpoint, rinse and repeat, but with a different HTTP method.
+Since the upvote and downvote share the same endpoint (public URL that exposes a part of an API), rinse and repeat, but with a different HTTP method.
 Upvoting and downvoting should now work! You can reload the page to double-check.
 
 ## Part 4: Comments!
@@ -208,7 +201,7 @@ const { comment } = req.body;
 ```
 The endpoint we will be posting to is `/dogs/<name>/comment`. Unlike downvoting and upvoting, we are posting a body, so we have to specify more options in our call to `fetch`.
 ```
-const apiResponse =  await fetch(`${host}/dogs/${name}/comment`, {
+const apiResponse =  fetch(`${host}/dogs/${name}/comment`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
