@@ -114,6 +114,30 @@ ChallengeResponseAuthentication no
 ```
 When you are finished making your changes, save and close the file using CTRL-X, then Y, then ENTER.
 
+#### Firewall
+
+We'll also want to set up a very basic firewall. These might seem like steps that are roundabout to our final goal of deployment, but in reality if they aren't done at the beginning, and properly, they won't be done at all. Ubuntu comes with a very basic Firewall called UFW, or the Ultimate FireWall. It's very easy to set up, and is made for ease of use (as opposed to the underlying iptables rules, which at least I personally have always had a ton of issues getting to work as I intend). 
+
+Different applications can register their profiles with UFW upon installation. These profiles allow UFW to manage these applications by name. OpenSSH, the service allowing us to connect to our server now, has a profile registered with UFW.
+
+You can see this by typing:
+
+`sudo ufw app list`
+
+We need to make sure that the firewall allows SSH connections so that we can log back in next time. We can allow these connections by typing:
+
+`sudo ufw allow OpenSSH`
+
+Afterwards, we can enable the firewall by typing:
+
+`sudo ufw enable`
+
+Type "y" and press ENTER to proceed. You can see that SSH connections are still allowed by typing:
+
+`sudo ufw status`
+
+You can manually specify ports or services with `sudo ufw deny <portnum>` or `sudo ufw allow <portnum>`.
+
 #### Environment Set Up
 
 One of the first issues you'll run into when setting up your VPS is mirroring your environment - there are a lot of tools and packages that you've gotten so used to having on your machine that you forget they were not installed by default. 
@@ -122,9 +146,15 @@ If you have preferences for shell, aliases, and various other dot files, install
 
 To get started, I'd recommend installing some of the core utilities and essential build libraries through apt.
 
-`sudo apt-get update && sudo apt-get install build-essential git `
+```
+sudo apt-get update 
+sudo apt-get upgrade -y
+sudo apt-get dist-upgrade -y
+sudo apt autoremove
+sudo apt-get install build-essential git 
+```
 
-Also, install mongo with:
+Also, if you plan on using a database, install mongo with:
 
 ```
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
@@ -133,6 +163,49 @@ sudo apt-get update
 sudo apt-get install -y mongodb-org
 sudo systemctl start mongod
 ```
+
+Finally, we'll want to install Node and NPM. We'll use nvm for this, the node version manager, as it'll allow us to effortlessly switch node versions.
+
+`curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash`
+
+To install the latest version of node, type
+
+`source ~/.bashrc && nvm install node && nvm use node`
+
+Now we can actually get to work with deploying our application!
+
+#### Setting up an app
+
+Now it's time to start deploying a specific app. We'll do it incrementally, starting with raw port access on a single process and then move to a process manager, analytics, and reverse proxies!
+
+The first step is to clone your project. The standard is in `/var/www/` but it doesn't really matter. If you'd prefer to organize your folder hierarchy differently, feel free to do so. 
+
+For this guide, I'll be using [RandomComic](https://github.com/jonluca/RandomComic) as the app I'll be deploying. Steps might be slightly different for your app, but as long as it's a node/express app it should be fairly similar.
+
+First set up your folder hiearchy:
+
+```
+sudo mkdir /var/www
+sudo chown -R `whoami` /var/www
+cd /var/www
+git clone https://github.com/jonluca/RandomComic
+```
+Note - if your repo is private, you'll need to generate ssh keys on your VPS and add them to GitHub! Instructions on how to do so are [here](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/)
+
+If everything goes well, you can now enter the directory and set everything up.
+
+*Note:* Good practice dictates to never push your `node_modules` folder - always add it to the gitignore, and reinstall when you reclone!
+
+```
+cd RandomComic
+npm install
+```
+
+Before we run the app, we want to make sure it's publicly accessible - check your `bin/www` or whatever run file you have for your starting port. Normally it's in the 8000s or 3000s. For our sample application, it's 8070
+
+Open the port up to the outside world with `sudo ufw allow 8070`
+
+Now, if you navigate to `<dropletip>:8070` you should see your app running! 
 
 # Glossary
 
