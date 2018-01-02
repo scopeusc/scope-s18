@@ -1,0 +1,46 @@
+add_header X-XSS-Protection "1; mode=block";
+add_header X-Content-Type-Options nosniff;
+add_header X-Frame-Options SAMEORIGIN;
+server_tokens off;
+
+server {
+    listen 80;
+
+    server_name jonluca.me www.jonluca.me jonlu.ca www.jonlu.ca;
+
+    add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains; preload';
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    location ~ /.git/ {
+        deny all;
+    }
+
+    location ~* /RandomComic/(.*) {
+        proxy_pass http://127.0.0.1:8070/$1$is_args$args;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location ~ /.well-known {
+        allow all;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    error_page 404 https://jonlu.ca/#404;
+
+    location ~* /(images|js|css|fonts|assets) {
+        expires 15d;
+    }
+
+}
+
+
