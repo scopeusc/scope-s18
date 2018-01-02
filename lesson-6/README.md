@@ -228,6 +228,47 @@ You can customize it a lot more - GitHub hooks for automatic updating, watching 
 Nginx is an incredibly powerful webserver in it's own right - it allows you to create virtual hosts, change proxy settings, load balance, and much more. It is one of the most common webservers in the world, and for good reason. 
 
 Right now, our app is on port `8070` - you wouldn't want users to navigate to a raw port to access the service. Of course, you could change it's port to 80 and have them navigate to the raw IP, but that's still not ideal - what if you want to serve more content?
+
+We can use a reverse proxy to route our requests to the right process, and to distribute the traffic as we see fit.
+
+Install nginx with 
+
+`sudo apt-get install nginx`
+
+This'll create the `/etc/nginx/` directory, which contains all the settings for nginx. 
+
+First, delete the default config found at `/etc/nginx/sites-available/default`, and replace it with the one in this repo. Also make sure the permissions are correct with `sudo chmod 644 /etc/nginx/sites-available/default`.
+
+There's a lot going on in this file, let's go over each part line by line.
+
+The start is 
+
+```
+add_header X-XSS-Protection "1; mode=block";
+add_header X-Content-Type-Options nosniff;
+add_header X-Frame-Options SAMEORIGIN;
+server_tokens off;
+```
+These are security directives - while our test app doesn't have a large attack surface, it is important to get in the habit of making your site as secure as possible. We also turn server_tokens off, which are the `X-Powered-Py: nginx <version number>` HTTP headers.
+
+```
+server {
+    listen 80;
+
+    server_name jonluca.me www.jonluca.me jonlu.ca www.jonlu.ca;
+
+    add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains; preload';
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    location ~ /.git/ {
+        deny all;
+    }
+    ...
+  ```
+
+Next, we declare a server block that listens on port 80 and matches 
 # Glossary
 
 | Acronym | Definition |
