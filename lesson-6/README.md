@@ -59,6 +59,8 @@ To log into your server, you will need to know your server's public IP address. 
 
 `ssh root@your_server_ip`
 
+<img src="https://i.imgur.com/CPzZPLR.png">
+
 Complete the login process by accepting the warning about host authenticity, if it appears, then providing your root authentication (password or private key). If it is your first time logging into the server with a password, you will also be prompted to change the root password.
 
 Please note that you're running as root right now - any processes you start will have full system privileges, which is a fairly large security concern! If your server is unsecured or an attacker manages to get RCE, it'll run as root by default. 
@@ -106,12 +108,6 @@ Find the line that specifies PasswordAuthentication, uncomment it by deleting th
 
 `PasswordAuthentication no`
 
-Here are two other settings that are important for key-only authentication and are set by default. If you haven't modified this file before, you do not need to change these settings:
-
-```
-PubkeyAuthentication yes
-ChallengeResponseAuthentication no
-```
 When you are finished making your changes, save and close the file using CTRL-X, then Y, then ENTER.
 
 #### Firewall
@@ -123,6 +119,8 @@ Different applications can register their profiles with UFW upon installation. T
 You can see this by typing:
 
 `sudo ufw app list`
+
+<img src="https://i.imgur.com/kgZehzR.png">
 
 We need to make sure that the firewall allows SSH connections so that we can log back in next time. We can allow these connections by typing:
 
@@ -201,12 +199,35 @@ cd RandomComic
 npm install
 ```
 
-Before we run the app, we want to make sure it's publicly accessible - check your `bin/www` or whatever run file you have for your starting port. Normally it's in the 8000s or 3000s. For our sample application, it's 8070
+Before we run the app, we want to make sure it's publicly accessible - check your `bin/www`. Normally it's in the 8000s or 3000s. For our sample application, it's 8070
 
-Open the port up to the outside world with `sudo ufw allow 8070`
+Open the port up to the outside world with `sudo ufw allow 8070`. Start the process with `node bin/www`.
 
-Now, if you navigate to `<dropletip>:8070` you should see your app running! 
+Now, if you navigate to `<droplet ip>:8070` you should see your app running! 
 
+<img src="https://i.imgur.com/6CIXCiw.jpg">
+
+#### Making the app robust
+
+The app is currently running naked on a port - this brings up a couple of issues. First, it's fairly difficult to scale - you can always upgrade your droplet, but if you receive too much traffic you'll pretty quickly hit the limit for what a single machine can handle, especially if it's not optimized properly. If it crashes right now, you're SOL.
+
+You'll want to load balance or distribute your resources, but you can't as it is right now. 
+
+This is where process managers and reverse proxies come into play. For our simple use cases, we'll use nginx and PM2. 
+
+We'll start with process management - this'll handle any crashes and restart your app automatically. It'll also allow you to control your app more than if you simply background the node process or use screen. 
+
+Install pm2 with `npm i -g pm2`, and then start your app with `pm2 start bin/www `. That's it!
+
+<img src="https://i.imgur.com/YcjAdIP.png">
+
+You can customize it a lot more - GitHub hooks for automatic updating, watching the working directory and autoreload, monitor, load balance, etc. 
+
+#### Nginx
+
+Nginx is an incredibly powerful webserver in it's own right - it allows you to create virtual hosts, change proxy settings, load balance, and much more. It is one of the most common webservers in the world, and for good reason. 
+
+Right now, our app is on port `8070` - you wouldn't want users to navigate to a raw port to access the service. Of course, you could change it's port to 80 and have them navigate to the raw IP, but that's still not ideal - what if you want to serve more content?
 # Glossary
 
 | Acronym | Definition |
