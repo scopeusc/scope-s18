@@ -255,10 +255,6 @@ These are security directives - while our test app doesn't have a large attack s
 server {
     listen 80;
 
-    server_name jonluca.me www.jonluca.me jonlu.ca www.jonlu.ca;
-
-    add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains; preload';
-
     root /var/www/html;
     index index.html index.htm;
 
@@ -266,9 +262,52 @@ server {
         deny all;
     }
     ...
-  ```
+```
 
-Next, we declare a server block that listens on port 80 and matches 
+Next, we declare a server block that listens on port 80. Nginx will effectively "take over" this port, and offer an http server over it. Note, you can have multiple server blocks that all listen on port 80, if you'd like to make individual changes to each server. 
+
+We add some precautionary, best practice measures - we disable fetching any git repositories, and set the root of the app to /var/www/html. 
+
+```
+	location ~* /(.*) {
+        proxy_pass http://127.0.0.1:8070/$1$is_args$args;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_cache_bypass $http_upgrade;
+    }
+```
+
+Next we get to the main route matching - this is a location block which uses regular expressions to match the url/suburl. We're telling it to grab anything from `<domain or ip>`/ onwards. We then use the capture group (.*) to match everything after document root (/).
+	
+Inside the location block, we use `proxy_pass` to pass on our request to a local process, with all the arguments and original suburl. We also set some headers so our express app knows it's been proxied. 
+
+Finally - 
+
+```
+    location ~ /.well-known {
+        allow all;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+    
+    location ~* /(images|js|css|fonts|assets) {
+        expires 15d;
+    }
+```
+
+The well-known location will be for our ssl cert, which we'll set up in the next section. We also define a 404 page for not found files, and tell any folders that don't change often to have a cache directive. 
+
+Once you've replaced the file with ours, type `sudo service nginx reload` - if you navigate to just your droplet ip, you should see the app!
+
+
+#### Domain
+
+
 # Glossary
 
 | Acronym | Definition |
