@@ -279,9 +279,8 @@ We add some precautionary, best practice measures - we disable fetching any git 
         proxy_cache_bypass $http_upgrade;
     }
 ```
-
 Next we get to the main route matching - this is a location block which uses regular expressions to match the url/suburl. We're telling it to grab anything from `<domain or ip>`/ onwards. We then use the capture group (.*) to match everything after document root (/).
-	
+
 Inside the location block, we use `proxy_pass` to pass on our request to a local process, with all the arguments and original suburl. We also set some headers so our express app knows it's been proxied. 
 
 Finally - 
@@ -307,7 +306,25 @@ Once you've replaced the file with ours, type `sudo service nginx reload` - if y
 
 #### Domain
 
+You should now register a domain for your app. In this example, we'll use namecheap, but all common registrars will have a very similar process.
 
+As a student you get a free domain from namecheap, so go ahead and register one there. We won't go through the process here, but it should be fairly self explanatory. 
+
+The only thing you need to do once you've registered it is to change the name servers to `ns1.digitalocean.com`, `ns2.digitalocean.com` and `ns3.digitalocean.com`, seen below
+
+TODO: Insert pic
+
+Now go to Digital Ocean, and go to Networking -> Domains
+
+<img src="https://i.imgur.com/uzVxBS7.png">
+
+Add a domain, then add an A record for your droplet and domain.
+
+<img src="https://i.imgur.com/Q9MsjFz.png">
+
+A lot of domain verification is done through DNS, so I'd recommend you get acquainted with what each of the records mean. For instance, AAAA records are IPv6 addresses, MX records are mail records, TEXT are just text associated with the domain, and CNAME are aliases for subdomains (for instance, if you want www.yoursite.com to go to your droplet, you'd add a CNAME like below:
+
+<img src="https://i.imgur.com/2tvWlwW.png">
 # Glossary
 
 | Acronym | Definition |
