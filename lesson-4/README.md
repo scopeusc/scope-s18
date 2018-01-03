@@ -1,19 +1,9 @@
 # Databases (MongoDB)
 
-This lesson will introduce you to some of the core concepts of databases such as the `CRUD` (CREATE, READ, UPDATE, DELETE) operations, NoSQL tables, and Object Modeling. We will be creating a dog adoption website
+This lesson will introduce you to some of the core concepts of databases such as the `CRUD` (CREATE, READ, UPDATE, DELETE) operations, NoSQL tables, and Object Modeling. We will be creating a dog adoption website!
 
 
 ## Part 1: Setup
-**MongoDB**
-
-MongoDB must be installed. You can verify this by typing `which mongod`.
-
-- MongoDB can be installed with HomeBrew (https://brew.sh/): `brew install mongodb`
--  Afterwards, you will need to create the directory where the MongoDB stores its documents by typing: `mkdir -p /data/db`
-- You may also have to give it the right permissions with ``sudo chown -R `id -un` /data/db``
-- Open another window in your Terminal and type `mongod`. This will start the MongoDB process. Keep this open – if you close it, MongoDB will quit.
-- You can now use the MongoDB shell by typing `mongo`. After typing this command, we should see in our Terminal containing the MongoDB process that we have established a connection with the database! If we think of `mongod` as the server, we can view `mongo` as the client.
-
 
 **Setting up the project**
 Inside the `lesson-4` directory, create a new directory called `lesson-4-<your-name>` and `cd` into it.
@@ -142,7 +132,19 @@ Let's see this all in action!
 ----------
 
 ## Part 3: Project Setup:
+**Nodemon**
+Nodemon is a node module that automatically restarts your project whenever you make a change. It's really useful when you're constantly making changes to your code, as we will.
 
+Install nodemon to your devDependencies.
+```
+npm install --save-dev nodemon
+```
+Edit your `package.json`'s start script so that it uses nodemon.
+```
+"scripts": {
+    "start": "nodemon ./bin/www"
+}
+```
 **Folder Configuration**
 
 In your top-level project directory, create a folder called `models`. We will be putting all of our schemas and models inside of here and import them from code inside our `routes` folder.
@@ -157,19 +159,87 @@ Navigate inside of `app.js` and import mongoose.
 ```
 const mongoose = require('mongoose');
 ```
-Now we have to connect our mongoose client with our MongoDB instance. By default, MongoDB serves on `localhost:27017`. You can name your database whatever you want it to, but simplicity's sake, let's just call it "lesson4". If the database doesn't exist, MongoDB will create an empty one for you. Keep in mind that when you run your express app, you will have to have `mongod` running in another terminal.
+Now we have to connect our mongoose client with our MongoDB instance. In order to allow everyone to connect to the same database, we have created a hosted MongoDB on mLab, which is a free hosting service. You can connect to the instance by copying the following into your `app.js`.
 ```
-mongoose.connect('mongodb://localhost:27017/lesson4');
+mongoose.connect('mongodb://scope:scope@ds064799.mlab.com:64799/scope-lesson-4');
+```
+You can also change all of the `var` to `const` and functions into arrow functions if it bothers you.
+
+## Part 4: Creating the user:
+### Defining the schema
+Because we are creating a social platform, we will need to store information about a user (in this case, their username and their adopted dogs). Hence, we will need to create a schema and model to correspond with the data we would like to persist in the database.
+
+In the `models` folder, create a file called `user.js` and import Mongoose as a dependency.
+```
+// user.js
+const mongoose = require('mongoose')
+```
+Let's begin to define our User schema. Mongoose supports a wide variety of different datatypes (you can read more about them at http://mongoosejs.com/docs/schematypes.html). For our username, we will use `String`.
+```
+const userSchema = new mongoose.Schema({
+    username: String
+});
+```
+A user also has list of adopted dogs, which will have the following:
+
+ - name
+ - imageUrl (from the dog API)
+ - age
+ - gender
+ - birthday
+
+Since we are working with a NoSQL database, we will not be storing data relationally (such as in SQL, for example). We will be thinking of a the User-Dogs relationship as a 'has-a' relationship, meaning that Dogs will be a property of User. Luckily for us, Mongoose supports nested schemas and arrays! Let's add the following into our User schema:
+```
+dogs: [{
+    name: String,
+    imageUrl: String,
+    age: Number.
+    gender: String,
+    birthday: Date,
+}],
 ```
 
+### Handling user creation
+**Editing the URL**
+We want to create an API endpoint to create a user. Although `express-generate` creates a `users.js` file for you under `routes/`, we want to edit the `app.js` file to prefix its route URL with `/api`. It is good practice to prefix all of your API routes with `/api`.
+```
+app.use('/api/users', users)
+```
+**Creating the endpoint**
+Since we are dealing with a `CREATE` operation, the appropriate HTTP method to use is `POST`.
+```
+router.post('/', (req, res) => {
 
+});
+```
+For now, let's assume that the user will `POST` a body containing just a `username` field. We learned from previous lessons that we can extract this with `req.body.username`;
 
+We can't just naively create a User; we have to check whether or not a User with such username already exists. In order to do so, we will be using the `findOne` static method on our User model. Every model compiled by Mongoose has a bunch of useful static methods, such as:
 
+ - find
+ - findOne
+ - findOneAndUpdate
+ - findById
+ - findByIdAndRemove
+
+The `findOne` method accepts a query (a plain JavaScript object) as its first parameter and returns a Promise.
+
+We will also need to import our `User` model from our `models/` folder.
+```
+const User = require('../models/user');
+
+router.post('/', (req, res) => {
+    const user = User.findOne({ username: req.body.username });
+});
+```
 
 ----------
 
 ## Recommended Resources
 
+- Mongoose CRUD reference: https://coursework.vschool.io/mongoose-crud/
 - Mongoose Docs: http://mongoosejs.com/index.html
+- Promise.all: https://developer.mozilla.org/enUS/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
+-  ES6 Arrow Functions: https://codeburst.io/javascript-arrow-functions-for-beginners-926947fc0cdc
 
 
