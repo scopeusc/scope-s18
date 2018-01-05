@@ -2,10 +2,11 @@ const express = require('express');
 const Clarifai = require('clarifai');
 const router = express.Router();
 
+const apiKey = require('../config/clarifai.json').key;
 
 // Initialize the API key
 const app = new Clarifai.App({
-    apiKey: 'db50b744e1a647f99be4674ede034ad8' // this is aliya's personal key plz don't use
+    apiKey: apiKey // this is aliya's personal key plz don't use
 });
 
 /* GET home page. */
@@ -22,12 +23,19 @@ router.post('/predict', function(req, res, next) {
         function(response) {
           const concepts = response.outputs[0].data.concepts;
 
-          res.render('predict', { concepts, image });
+          let verdict = false;
+
+          for (var c of concepts) {
+            if (c.name === 'dog') {
+              verdict = true;
+              break;
+            }
+          }
+
+          res.render('predict', { concepts, image, verdict });
         },
         function(err) {
-          console.log(err);
-
-          res.redirect('/');
+          res.render('error', { message: 'Error trying to process that image. Likely a bad URL'});
         }
       );
 });
