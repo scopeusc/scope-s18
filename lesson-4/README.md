@@ -33,7 +33,7 @@ This creates an Express application in your current directory and sets `ejs` to 
 Although we could technically use MongoDB with its native driver (http://mongodb.github.io/node-mongodb-native/3.0/), it requires a lot of configuration and a lot of code to be written in order to perform basic operations.
 
 Here is an example with the native driver detailing a `CREATE` operation:
-```
+```JS
 const { MongoClient } = require('mongodb');
 
 MongoClient.connect(url, (err, client) => {
@@ -58,8 +58,9 @@ MongoClient.connect(url, (err, client) => {
 
 // disgusting.
 ```
+
 With Mongoose, it can be as simple as:
-```
+```JS
 const mongoose = require('mongoose');
 const Dog = require('../models/Dog');
 
@@ -83,7 +84,7 @@ dogPromise.save()
 In addition to Mongoose allowing us to write more user-friendly code via Promises, it also allows us to define Schemas for our objects. Schemas make our data more structured and have built-in validation for type-checking and missing fields.
 
 An example Schema is as follows:
-```
+```JS
 const mongoose = require('mongoose');
 const dogSchema = new mongoose.Schema({
     // We can specify type like this:
@@ -102,7 +103,7 @@ const dogSchema = new mongoose.Schema({
 In addition to creating a `schema`, we have to create a `model` that corresponds to it. A `model` is a one-to-one mapping between a Mongoose schema and an entry in the database.
 
 Defining a model is as simple as follows:
-```
+```JS
 const Dog = mongoose.model('Dog', dogSchema);
 module.exports = Dog;
 ```
@@ -111,7 +112,7 @@ The first parameter is the name of the model, which we use in performing `CRUD` 
 **Validation**
 
 If we try to insert an erroneous document:
-```
+```JS
 const badDogPromise = new Dog({
     name: 'Daisy',
     age: 9,
@@ -140,7 +141,7 @@ Install nodemon to your devDependencies.
 npm install --save-dev nodemon
 ```
 Edit your `package.json`'s start script so that it uses nodemon.
-```
+```JS
 "scripts": {
     "start": "nodemon ./bin/www"
 }
@@ -156,11 +157,11 @@ Install mongoose.
 npm install --save mongoose
 ```
 Navigate inside of `app.js` and import mongoose.
-```
+```JS
 const mongoose = require('mongoose');
 ```
 Now we have to connect our mongoose client with our MongoDB instance. In order to allow everyone to connect to the same database, we have created a hosted MongoDB on mLab, which is a free hosting service. You can connect to the instance by copying the following into your `app.js`.
-```
+```JS
 mongoose.connect('mongodb://scope:scope@ds064799.mlab.com:64799/scope-lesson-4');
 ```
 You can also change all of the `var` to `const` and functions into arrow functions if it bothers you.
@@ -170,12 +171,12 @@ You can also change all of the `var` to `const` and functions into arrow functio
 Because we are creating a social platform, we will need to store information about a user (in this case, their username and their adopted dogs). Hence, we will need to create a schema and model to correspond with the data we would like to persist in the database.
 
 In the `models` folder, create a file called `user.js` and import Mongoose as a dependency.
-```
+```JS
 // user.js
 const mongoose = require('mongoose')
 ```
 Let's begin to define our User schema. Mongoose supports a wide variety of different datatypes (you can read more about them at http://mongoosejs.com/docs/schematypes.html). For our username, we will use `String`.
-```
+```JS
 const userSchema = new mongoose.Schema({
     username: String
 });
@@ -189,7 +190,7 @@ A user also has list of adopted dogs, which will have the following:
  - birthday
 
 Since we are working with a NoSQL database, we will not be storing data relationally (such as in SQL, for example). We will be thinking of a the User-Dogs relationship as a 'has-a' relationship, meaning that Dogs will be a property of User. Luckily for us, Mongoose supports nested schemas and arrays! Let's add the following into our User schema:
-```
+```JS
 dogs: [{
     name: String,
     imageUrl: String,
@@ -202,12 +203,12 @@ dogs: [{
 ### Handling user creation
 **Editing the URL**
 We want to create an API endpoint to create a user. Although `express-generate` creates a `users.js` file for you under `routes/`, we want to edit the `app.js` file to prefix its route URL with `/api`. It is good practice to prefix all of your API routes with `/api`.
-```
+```JS
 app.use('/api/users', users)
 ```
 **Creating the endpoint**
 Since we are dealing with a `CREATE` operation, the appropriate HTTP method to use is `POST`.
-```
+```JS
 router.post('/', (req, res) => {
 
 });
@@ -225,7 +226,7 @@ We can't just naively create a User; we have to check whether or not a User with
 The `findOne` method accepts a query (a plain JavaScript object) as its first parameter and returns a Promise.
 
 We will also need to import our `User` model from our `models/` folder.
-```
+```JS
 const User = require('../models/user');
 
 router.post('/', (req, res) => {
@@ -241,5 +242,3 @@ router.post('/', (req, res) => {
 - Mongoose Docs: http://mongoosejs.com/index.html
 - Promise.all: https://developer.mozilla.org/enUS/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
 -  ES6 Arrow Functions: https://codeburst.io/javascript-arrow-functions-for-beginners-926947fc0cdc
-
-
