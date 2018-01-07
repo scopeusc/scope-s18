@@ -269,7 +269,7 @@ Next, we declare a server block that listens on port 80. Nginx will effectively 
 We add some precautionary, best practice measures - we disable fetching any git repositories, and set the root of the app to /var/www/html. 
 
 ```
-	location ~* /(.*) {
+    location ~* /(.*) {
         proxy_pass http://127.0.0.1:8070/$1$is_args$args;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -318,13 +318,23 @@ Now go to Digital Ocean, and go to Networking -> Domains
 
 <img src="https://i.imgur.com/uzVxBS7.png">
 
-Add a domain, then add an A record for your droplet and domain.
+Add a domain (without the http/www, so http://www.google.com/ becomes google.com), then add an A record for your droplet and domain.
 
 <img src="https://i.imgur.com/Q9MsjFz.png">
 
 A lot of domain verification is done through DNS, so I'd recommend you get acquainted with what each of the records mean. For instance, AAAA records are IPv6 addresses, MX records are mail records, TEXT are just text associated with the domain, and CNAME are aliases for subdomains (for instance, if you want www.yoursite.com to go to your droplet, you'd add a CNAME like below:
 
 <img src="https://i.imgur.com/2tvWlwW.png">
+
+Your DNS settings are now complete! You might have to wait a bit (up to 24 hours) for them to propagate, but in my experience it usually takes about 5 minutes. 
+
+Now we need to make some slight adjustments to our nginx config to get our domain to work properly - right below line 7, where it declares the port, add `server_name yoururl.com www.yoururl.com;`
+
+
+Finally, check that the config is valid with `nginx -t` and then reload it with `sudo service nginx reload`. 
+
+When you go to your URL, you should see RandomComic (or your webapp) live and up!
+
 # Glossary
 
 | Acronym | Definition |
