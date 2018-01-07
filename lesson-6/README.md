@@ -335,6 +335,41 @@ Finally, check that the config is valid with `nginx -t` and then reload it with 
 
 When you go to your URL, you should see RandomComic (or your webapp) live and up!
 
+#### SSL 
+
+We're almost done - our last item of business is to set up a TLS certificate, so we can communicate with our server securely!
+
+This has many added benefits, although one of the most important ones is the ability to use http2, a much more efficient http protocol!
+
+We'll start by installing Certbot, Let's Encrypt's certificate management system and allow https traffic on our box.
+
+```
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install python-certbot-nginx
+sudo ufw allow 'Nginx Full'
+```
+
+Now we want to go through the process of actually registering a certificate for our domain.
+
+`sudo certbot --nginx -d example.com -d www.example.com`
+
+Replace example.com with your domain, and then follow the directions in the terminal! When it asks you if you'd like to redirect, I'd recommend saying yes and only communicating over https, but your use case may vary!
+
+And that's it! The certificate should automatically renew itself on your server with certbot.
+
+If you run into any issues, I'd recommend reading [this guide](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04).
+
+# Wrapping up
+
+At this point, you set up a server with your own account, fortified and hardened it, and then deployed a web app. The field of web development and deployment changes constantly, though, and it takes a while to get used to it and feel like you have a good grasp on everything that's going on. 
+
+Hopefully you enjoyed your time in Scope this semester, and you won't stop learning about web dev and devops. 
+
+The first thing I believe everyone should read after this semester is [High Performance Browser Networking](hpbn.co/#toc), which gives an in depth look at optimizing your application for performance and speed. 
+
+Good luck!
+
 # Glossary
 
 | Acronym | Definition |
