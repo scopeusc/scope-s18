@@ -372,9 +372,9 @@ Good luck!
 
 # Glossary
 
-| Acronym | Definition |
+| Acronym/word | Definition |
 | -------- | -------- |
-| VPS | Virtual Private Server - Basically just a box hosted by some cloud provider |
+| VPS, droplet | Virtual Private Server - Basically just a box hosted by some cloud provider |
 | Cloud Provider | A company that rents out servers - biggest ones are AWS, Azure, DigitalOcean, and GCP |
 | SSL/TLS | Secure Socket Layer (modern versions are actually Transport Layer Security) - encrypts all communication between the client and server. Not at application layer, so it is invisible to anything you build  |
 | DNS | Domain Name System - resolves URLs to IPs. How a client/browser knows that your website actually goes to your server |
@@ -382,3 +382,4 @@ Good luck!
 | GEP | [GitHub Education Pack](https://education.github.com/pack) - lots of free resources for CS students |
 | LTS | Long Term Support - the version of distros/products that will receive guaranteed support/bug fixes for a certain amount of time (usually around 18 months) |
 | RCE | Remote Code Execution - Code gets run that didn't originate from the machine. Usually an attacker compromising your system|
+| nginx | Nginx, one of the most common web servers |
