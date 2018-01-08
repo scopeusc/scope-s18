@@ -6,3 +6,16 @@ body {
 a {
   color: #00B7FF;
 }
+
+.login {
+    margin: 0 auto;
+    width: 960px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.form-detail {
+    margin: 25px 0;
+}
