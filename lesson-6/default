@@ -31,8 +31,6 @@ server {
         try_files $uri $uri/ =404;
     }
 
-    error_page 404 https://jonlu.ca/#404;
-
     location ~* /(images|js|css|fonts|assets) {
         expires 15d;
     }

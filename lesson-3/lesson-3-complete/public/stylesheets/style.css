@@ -1,0 +1,75 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  text-align: center;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.text-input {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1.15em;
+}
+
+.submit-btn,.try-again-btn {
+  border: 1px solid #1E9FC9;
+  background: #5FCFF5;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1.15em;
+  color: #ffffff;
+}
+
+.try-again-btn {
+  display: inline-block;
+  margin-top: 15px;
+  text-decoration: none;
+}
+
+.submit-btn:hover, .submit-btn:active, .try-again-btn:hover, .try-again-btn:active {
+  background: #44BBE3;
+}
+
+.predict-image {
+  max-width: 100%;
+}
+
+.is-dog {
+  color: #26A818;
+}
+
+.is-not-dog {
+  color: #910F0F;
+}
+
+.container {
+  width: 93.75%;
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.left-col {
+  flex-basis: 50%;
+}
+
+.right-col {
+  flex-basis: 45%;
+}
+
+.concept-list {
+  list-style: none;
+}
+
+.concept-item {
+  padding: 10px;
+  border: 1px solid #cccccc;
+  margin-bottom: 10px;
+  text-align: left;
+}

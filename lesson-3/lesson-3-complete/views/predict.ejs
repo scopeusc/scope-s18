@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lesson 3</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Dog or Not Dog</h1>
+
+    <div class='container'>
+      <div class='left-col'>
+        <h2>Original Image</h2>
+        <img src='<%= image %>' class='predict-image'/>
+
+        <a href='/' class='try-again-btn'>Try Again?</a>
+      </div>
+
+      <div class='right-col'>
+        <h2>
+          Verdict: 
+          
+          <% if (verdict) { %> 
+            <span class='is-dog'>DOG</span>
+          <% } else { %>
+            <span class='is-not-dog'>NOT DOG</span>
+          <% } %>
+        </h2>
+
+        <ul class='concept-list'>
+          <% concepts.forEach(function(concept) { %>
+            <li class='concept-item'>
+              <b><%= concept.name %></b> (<%= concept.value %>)
+            </li>
+          <% }); %>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

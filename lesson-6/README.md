@@ -255,10 +255,6 @@ These are security directives - while our test app doesn't have a large attack s
 server {
     listen 80;
 
-    server_name jonluca.me www.jonluca.me jonlu.ca www.jonlu.ca;
-
-    add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains; preload';
-
     root /var/www/html;
     index index.html index.htm;
 
@@ -266,14 +262,119 @@ server {
         deny all;
     }
     ...
-  ```
+```
 
-Next, we declare a server block that listens on port 80 and matches 
+Next, we declare a server block that listens on port 80. Nginx will effectively "take over" this port, and offer an http server over it. Note, you can have multiple server blocks that all listen on port 80, if you'd like to make individual changes to each server. 
+
+We add some precautionary, best practice measures - we disable fetching any git repositories, and set the root of the app to /var/www/html. 
+
+```
+    location ~* /(.*) {
+        proxy_pass http://127.0.0.1:8070/$1$is_args$args;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_cache_bypass $http_upgrade;
+    }
+```
+Next we get to the main route matching - this is a location block which uses regular expressions to match the url/suburl. We're telling it to grab anything from `<domain or ip>`/ onwards. We then use the capture group (.*) to match everything after document root (/).
+
+Inside the location block, we use `proxy_pass` to pass on our request to a local process, with all the arguments and original suburl. We also set some headers so our express app knows it's been proxied. 
+
+Finally - 
+
+```
+    location ~ /.well-known {
+        allow all;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+    
+    location ~* /(images|js|css|fonts|assets) {
+        expires 15d;
+    }
+```
+
+The well-known location will be for our ssl cert, which we'll set up in the next section. We also define a 404 page for not found files, and tell any folders that don't change often to have a cache directive. 
+
+Once you've replaced the file with ours, type `sudo service nginx reload` - if you navigate to just your droplet ip, you should see the app!
+
+
+#### Domain
+
+You should now register a domain for your app. In this example, we'll use namecheap, but all common registrars will have a very similar process.
+
+As a student you get a free domain from namecheap, so go ahead and register one there. We won't go through the process here, but it should be fairly self explanatory. 
+
+The only thing you need to do once you've registered it is to change the name servers to `ns1.digitalocean.com`, `ns2.digitalocean.com` and `ns3.digitalocean.com`, seen below
+
+TODO: Insert pic
+
+Now go to Digital Ocean, and go to Networking -> Domains
+
+<img src="https://i.imgur.com/uzVxBS7.png">
+
+Add a domain (without the http/www, so http://www.google.com/ becomes google.com), then add an A record for your droplet and domain.
+
+<img src="https://i.imgur.com/Q9MsjFz.png">
+
+A lot of domain verification is done through DNS, so I'd recommend you get acquainted with what each of the records mean. For instance, AAAA records are IPv6 addresses, MX records are mail records, TEXT are just text associated with the domain, and CNAME are aliases for subdomains (for instance, if you want www.yoursite.com to go to your droplet, you'd add a CNAME like below:
+
+<img src="https://i.imgur.com/2tvWlwW.png">
+
+Your DNS settings are now complete! You might have to wait a bit (up to 24 hours) for them to propagate, but in my experience it usually takes about 5 minutes. 
+
+Now we need to make some slight adjustments to our nginx config to get our domain to work properly - right below line 7, where it declares the port, add `server_name yoururl.com www.yoururl.com;`
+
+
+Finally, check that the config is valid with `nginx -t` and then reload it with `sudo service nginx reload`. 
+
+When you go to your URL, you should see RandomComic (or your webapp) live and up!
+
+#### SSL 
+
+We're almost done - our last item of business is to set up a TLS certificate, so we can communicate with our server securely!
+
+This has many added benefits, although one of the most important ones is the ability to use http2, a much more efficient http protocol!
+
+We'll start by installing Certbot, Let's Encrypt's certificate management system and allow https traffic on our box.
+
+```
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install python-certbot-nginx
+sudo ufw allow 'Nginx Full'
+```
+
+Now we want to go through the process of actually registering a certificate for our domain.
+
+`sudo certbot --nginx -d example.com -d www.example.com`
+
+Replace example.com with your domain, and then follow the directions in the terminal! When it asks you if you'd like to redirect, I'd recommend saying yes and only communicating over https, but your use case may vary!
+
+And that's it! The certificate should automatically renew itself on your server with certbot.
+
+If you run into any issues, I'd recommend reading [this guide](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04).
+
+# Wrapping up
+
+At this point, you set up a server with your own account, fortified and hardened it, and then deployed a web app. The field of web development and deployment changes constantly, though, and it takes a while to get used to it and feel like you have a good grasp on everything that's going on. 
+
+Hopefully you enjoyed your time in Scope this semester, and you won't stop learning about web dev and devops. 
+
+The first thing I believe everyone should read after this semester is [High Performance Browser Networking](hpbn.co/#toc), which gives an in depth look at optimizing your application for performance and speed. 
+
+Good luck!
+
 # Glossary
 
-| Acronym | Definition |
+| Acronym/word | Definition |
 | -------- | -------- |
-| VPS | Virtual Private Server - Basically just a box hosted by some cloud provider |
+| VPS, droplet | Virtual Private Server - Basically just a box hosted by some cloud provider |
 | Cloud Provider | A company that rents out servers - biggest ones are AWS, Azure, DigitalOcean, and GCP |
 | SSL/TLS | Secure Socket Layer (modern versions are actually Transport Layer Security) - encrypts all communication between the client and server. Not at application layer, so it is invisible to anything you build  |
 | DNS | Domain Name System - resolves URLs to IPs. How a client/browser knows that your website actually goes to your server |
@@ -281,3 +382,4 @@ Next, we declare a server block that listens on port 80 and matches
 | GEP | [GitHub Education Pack](https://education.github.com/pack) - lots of free resources for CS students |
 | LTS | Long Term Support - the version of distros/products that will receive guaranteed support/bug fixes for a certain amount of time (usually around 18 months) |
 | RCE | Remote Code Execution - Code gets run that didn't originate from the machine. Usually an attacker compromising your system|
+| nginx | Nginx, one of the most common web servers |

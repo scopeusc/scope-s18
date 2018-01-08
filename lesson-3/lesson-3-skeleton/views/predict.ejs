@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lesson 3</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Dog Haus</h1>
+    <h2>Original Image</h2>
+    <img src="<%= image %>" />
+    
+    <ul>
+      <% concepts.forEach(function(concept) { %>
+        <li>
+          <b><%= concept.name %></b> (<%= concept.value %>)
+        </li>
+      <% }); %>
+    </ul>
+  </body>
+</html>

@@ -58,8 +58,9 @@ MongoClient.connect(url, (err, client) => {
 
 // disgusting.
 ```
+
 With Mongoose, it can be as simple as:
-```
+```JS
 const mongoose = require('mongoose');
 const Dog = require('../models/Dog');
 
@@ -140,7 +141,7 @@ Install nodemon to your devDependencies.
 npm install --save-dev nodemon
 ```
 Edit your `package.json`'s start script so that it uses nodemon.
-```
+```JS
 "scripts": {
     "start": "nodemon ./bin/www"
 }
@@ -240,5 +241,3 @@ router.post('/', (req, res) => {
 - Mongoose Docs: http://mongoosejs.com/index.html
 - Promise.all: https://developer.mozilla.org/enUS/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
 -  ES6 Arrow Functions: https://codeburst.io/javascript-arrow-functions-for-beginners-926947fc0cdc
-
-
