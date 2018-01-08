@@ -22,7 +22,6 @@ router.post('/', (req, res) => {
 
 router.post('/adopt/', (req, res) => {
   const { username, dog } = req.body;
-  console.log(dog);
   if (!username || !dog) {
     return res.status(400).send({ error: 'Username or dog not specified'});
   }

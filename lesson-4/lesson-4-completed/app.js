@@ -8,7 +8,6 @@ const mongoose = require('mongoose');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
-const dogs = require('./routes/dogs');
 
 const app = express();
 
@@ -26,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/api/users', users);
-app.use('/api/dogs', dogs);
 
 mongoose.connect('mongodb://scope:scope@ds064799.mlab.com:64799/scope-lesson-4');
 

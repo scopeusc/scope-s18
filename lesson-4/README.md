@@ -58,9 +58,8 @@ MongoClient.connect(url, (err, client) => {
 
 // disgusting.
 ```
-
 With Mongoose, it can be as simple as:
-```JS
+```
 const mongoose = require('mongoose');
 const Dog = require('../models/Dog');
 
@@ -141,7 +140,7 @@ Install nodemon to your devDependencies.
 npm install --save-dev nodemon
 ```
 Edit your `package.json`'s start script so that it uses nodemon.
-```JS
+```
 "scripts": {
     "start": "nodemon ./bin/www"
 }
@@ -229,9 +228,56 @@ We will also need to import our `User` model from our `models/` folder.
 const User = require('../models/user');
 
 router.post('/', (req, res) => {
-    const user = User.findOne({ username: req.body.username });
+    const user = User.findOne({ username: req.body.username })
+        .then(...) // find the user & save
+        .then(...) // send back the user object as a response
+        .catch(...);
 });
 ```
+When the promise is resolved in the `.then()`, the parameter passed into the function will be the user that is retrieved from MongoDB. **It will enter the first `.then()` even if no document was found.**
+
+ - If the user is undefined, create a new user and call `.save()` on it and return the Promise.
+ ```javascript
+
+ if (user) {
+      throw `${username} already exists.`;
+}
+const newUser = new User(req.body);
+/*
+req.body = { username: ... }
+*/
+return newUser.save();
+// .save() returns a Promise, which we act upon in the next .then()
+ ```
+ - Else, throw an error. Remember that the `.catch()` will catch any error thrown at any point in the Promise chain.
+
+If the user was successfully created, the user JavaScript object will be passed into the parameter of the second `.then()`, which we can then send back to the client.
+```javascript
+.then(user => res.status(200).send(user))
+```
+If you try running the application now, you'll actually be able to create a user – but you will still get errors because we haven't written created the `GET` route for `/home` in `index.js` yet!
+
+## Part 5: Rendering the Homepage
+### Dog API
+The Homepage will be responsible for displaying a list of dogs which a user can adopt!
+To do so, we will be using the Dog API (https://dog.ceo/dog-api/)
+Specifically, we be using the `/api/breed/{breed name}/images/random` route to retrieve a random image of a dog.
+Because the images retrieved can be pretty large, we'll only be retrieving seven images for right now. Let's define an array of breeds at the top of the function.
+```javascript
+const breeds = [
+    'maltese',
+    'terrier',
+    'pug',
+    'akita',
+    'labrador',
+    'shihtzu',
+    'pomeranian',
+  ];
+```
+### Promise.all
+Although we've worked with using Promises to retrieve the results of one `fetch`, what happens if we want to retrieve a bunch of them at the same time, and execute some code when all of them have completed?
+
+
 
 ----------
 
@@ -241,3 +287,5 @@ router.post('/', (req, res) => {
 - Mongoose Docs: http://mongoosejs.com/index.html
 - Promise.all: https://developer.mozilla.org/enUS/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
 -  ES6 Arrow Functions: https://codeburst.io/javascript-arrow-functions-for-beginners-926947fc0cdc
+
+
