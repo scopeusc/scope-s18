@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Homepage</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css' />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.bundle.min.js" integrity="sha384-VspmFJ2uqRrKr3en+IG0cIq1Cl/v/PHneDw6SQZYgrcr8ZZmZoQ3zhuGfMnSR/F2" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <script>
+    function navigateHome() {
+      window.location = '/home/';
+    }
+
+    function navigateToSocial() {
+      window.location = '/social/';
+    }
+  </script>
+  <body>
+    <nav class="navbar navbar-dark bg-primary">
+      <div>
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="navigateHome()">Home</a>
+          </li>
+          <li class="nav-item-active">
+            <a class="nav-link" href="#">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="navigateToSocial()">Social</a>
+          </li>
+
+        </ul>
+
+
+      </div>
+    </nav>
+    <div class="wrapper">
+      <div class="container" style="height: 70vh;">
+        <h3>
+          <%=user.username%>'s dogs:
+        </h3>
+        <% user.dogs.forEach(function(dog) { %>
+          <li class="list-group-item list-group-item-action">
+            <div class="card">
+              <img class="card-img-top dog-image" src="<%=dog.imageUrl%>" alt="dog image"/>
+              <div class="card-body">
+                <h5 class="card-title"><%= dog.name %></h5>
+                <p class="card-text">
+                  <strong>Birthday: </strong><%= dog.birthday %>
+                </p>
+                <p class="card-text">
+                  <strong>Gender: </strong><%= dog.gender %>
+                </p>
+              </div>
+            </div>
+          </li>
+        <% });%>
+
+      </div>
+    </div>
+
+  </body>
+</html>

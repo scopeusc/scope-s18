@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema({
   dogs: [{
     name: String,
     imageUrl: String,
-    age: Number,
     gender: String,
     birthday: Date,
   }],

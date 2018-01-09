@@ -15,7 +15,6 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 
 const index = require('./routes/index');
 const users = require('./routes/users');
-const dogs = require('./routes/dogs');
 
 const User = require('./models/user');
 
@@ -44,7 +43,7 @@ const store = new MongoDBStore({
 app.use(session({
   secret: 'keyboard cat',
   store: store,
-  cookie: { secure: true }
+  cookie: { secure: true },
   resave: true,
   saveUninitialized: true
 }));
@@ -53,7 +52,6 @@ app.use(session({
 // Configure our routes
 app.use('/', index);
 app.use('/api/users', users);
-app.use('/api/dogs', dogs);
 
 // Passport configuration
 passport.serializeUser(function(user, done) {

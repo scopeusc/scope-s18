@@ -46,7 +46,10 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 The second dependency `connect-mongodb-session` takes in `express-session` as a parameter, so remember to do that!
 
 **Creating the Store**
-Copy and paste the following code after your initialize your app's static directory
+
+The store is essentially a module that will handle all of the logic involving storing the actual Sessions in our database.
+
+Copy and paste the following code after you initialize your app's static directory
 
 ```JS
 ...
@@ -62,7 +65,11 @@ const store = new MongoDBStore({
 * The `uri` field specifies where our URI of our Mongo instance
 * The `collection` field specifies what we want to name our document used for storing sessions. In this case, `Sessions`
 
+
 **Creating the Session Middleware**
+
+
+
 
 ## Part 3: Setting up Passport
 **Installing our dependencies**
@@ -74,7 +81,7 @@ npm install --save passport passport-local bcryptjs
 
 **Motivation**
 
-**Serializing and Deserializating our users
+**Serializing and Deserializing our users**
 
 **Writing our Local Strategy**
 

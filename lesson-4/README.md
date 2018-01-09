@@ -9,19 +9,19 @@ This lesson will introduce you to some of the core concepts of databases such as
 Inside the `lesson-4` directory, create a new directory called `lesson-4-<your-name>` and `cd` into it.
 
 Create a Node.js project by typing the following:
-```
+```javascript
 npm init
 ```
 You should now see a `package.json` file inside your project directory.
 
 Make sure to install Express as a dependency.
-```
+```javascript
 npm install --save express
 ```
 
 **Creating the Express.js project**
 Make sure you are in the same directory with `package.json`. You should have `express-generator` globally installed from the previous projects.
-```
+```javascript
 express --view=ejs
 ```
 This creates an Express application in your current directory and sets `ejs` to the default view engine. More cli options can be found at https://expressjs.com/en/starter/generator.html. For simplicity's sake, we will be using this relatively barebones configuration.
@@ -33,7 +33,7 @@ This creates an Express application in your current directory and sets `ejs` to 
 Although we could technically use MongoDB with its native driver (http://mongodb.github.io/node-mongodb-native/3.0/), it requires a lot of configuration and a lot of code to be written in order to perform basic operations.
 
 Here is an example with the native driver detailing a `CREATE` operation:
-```JS
+```javascript
 const { MongoClient } = require('mongodb');
 
 MongoClient.connect(url, (err, client) => {
@@ -43,8 +43,8 @@ MongoClient.connect(url, (err, client) => {
   db.collection('dogs').insertOne({
        name: 'Spot',
        breed: 'French Terrier',
-       age: 5,
        gender: 'female',
+       birthday: 'Fri Aug 16 1985 00:00:00 GMT-0400 (EDT)',
     },
     {
         w: 'majority',
@@ -58,9 +58,8 @@ MongoClient.connect(url, (err, client) => {
 
 // disgusting.
 ```
-
 With Mongoose, it can be as simple as:
-```JS
+```
 const mongoose = require('mongoose');
 const Dog = require('../models/Dog');
 
@@ -84,7 +83,7 @@ dogPromise.save()
 In addition to Mongoose allowing us to write more user-friendly code via Promises, it also allows us to define Schemas for our objects. Schemas make our data more structured and have built-in validation for type-checking and missing fields.
 
 An example Schema is as follows:
-```JS
+```javascript
 const mongoose = require('mongoose');
 const dogSchema = new mongoose.Schema({
     // We can specify type like this:
@@ -103,7 +102,7 @@ const dogSchema = new mongoose.Schema({
 In addition to creating a `schema`, we have to create a `model` that corresponds to it. A `model` is a one-to-one mapping between a Mongoose schema and an entry in the database.
 
 Defining a model is as simple as follows:
-```JS
+```javascript
 const Dog = mongoose.model('Dog', dogSchema);
 module.exports = Dog;
 ```
@@ -112,7 +111,7 @@ The first parameter is the name of the model, which we use in performing `CRUD` 
 **Validation**
 
 If we try to insert an erroneous document:
-```JS
+```javascript
 const badDogPromise = new Dog({
     name: 'Daisy',
     age: 9,
@@ -137,11 +136,11 @@ Let's see this all in action!
 Nodemon is a node module that automatically restarts your project whenever you make a change. It's really useful when you're constantly making changes to your code, as we will.
 
 Install nodemon to your devDependencies.
-```
+```javascript
 npm install --save-dev nodemon
 ```
 Edit your `package.json`'s start script so that it uses nodemon.
-```JS
+```
 "scripts": {
     "start": "nodemon ./bin/www"
 }
@@ -153,15 +152,15 @@ In your top-level project directory, create a folder called `models`. We will be
 **Mongoose Setup**
 
 Install mongoose.
-```
+```javascript
 npm install --save mongoose
 ```
 Navigate inside of `app.js` and import mongoose.
-```JS
+```javascript
 const mongoose = require('mongoose');
 ```
 Now we have to connect our mongoose client with our MongoDB instance. In order to allow everyone to connect to the same database, we have created a hosted MongoDB on mLab, which is a free hosting service. You can connect to the instance by copying the following into your `app.js`.
-```JS
+```javascript
 mongoose.connect('mongodb://scope:scope@ds064799.mlab.com:64799/scope-lesson-4');
 ```
 You can also change all of the `var` to `const` and functions into arrow functions if it bothers you.
@@ -171,12 +170,12 @@ You can also change all of the `var` to `const` and functions into arrow functio
 Because we are creating a social platform, we will need to store information about a user (in this case, their username and their adopted dogs). Hence, we will need to create a schema and model to correspond with the data we would like to persist in the database.
 
 In the `models` folder, create a file called `user.js` and import Mongoose as a dependency.
-```JS
+```javascript
 // user.js
 const mongoose = require('mongoose')
 ```
 Let's begin to define our User schema. Mongoose supports a wide variety of different datatypes (you can read more about them at http://mongoosejs.com/docs/schematypes.html). For our username, we will use `String`.
-```JS
+```javascript
 const userSchema = new mongoose.Schema({
     username: String
 });
@@ -190,11 +189,10 @@ A user also has list of adopted dogs, which will have the following:
  - birthday
 
 Since we are working with a NoSQL database, we will not be storing data relationally (such as in SQL, for example). We will be thinking of a the User-Dogs relationship as a 'has-a' relationship, meaning that Dogs will be a property of User. Luckily for us, Mongoose supports nested schemas and arrays! Let's add the following into our User schema:
-```JS
+```javascript
 dogs: [{
     name: String,
     imageUrl: String,
-    age: Number.
     gender: String,
     birthday: Date,
 }],
@@ -203,12 +201,12 @@ dogs: [{
 ### Handling user creation
 **Editing the URL**
 We want to create an API endpoint to create a user. Although `express-generate` creates a `users.js` file for you under `routes/`, we want to edit the `app.js` file to prefix its route URL with `/api`. It is good practice to prefix all of your API routes with `/api`.
-```JS
+```javascript
 app.use('/api/users', users)
 ```
 **Creating the endpoint**
 Since we are dealing with a `CREATE` operation, the appropriate HTTP method to use is `POST`.
-```JS
+```javascript
 router.post('/', (req, res) => {
 
 });
@@ -226,13 +224,172 @@ We can't just naively create a User; we have to check whether or not a User with
 The `findOne` method accepts a query (a plain JavaScript object) as its first parameter and returns a Promise.
 
 We will also need to import our `User` model from our `models/` folder.
-```JS
+```javascript
 const User = require('../models/user');
 
 router.post('/', (req, res) => {
-    const user = User.findOne({ username: req.body.username });
+    const user = User.findOne({ username: req.body.username })
+        .then(...) // find the user & save
+        .then(...) // send back the user object as a response
+        .catch(...);
 });
 ```
+When the promise is resolved in the `.then()`, the parameter passed into the function will be the user that is retrieved from MongoDB. **It will enter the first `.then()` even if no document was found.**
+
+ - If the user is undefined, create a new user and call `.save()` on it and return the Promise.
+ ```javascript
+
+ if (user) {
+      throw `${username} already exists.`;
+}
+const newUser = new User(req.body);
+/*
+req.body = { username: ... }
+*/
+return newUser.save();
+// .save() returns a Promise, which we act upon in the next .then()
+ ```
+ - Else, throw an error. Remember that the `.catch()` will catch any error thrown at any point in the Promise chain.
+
+If the user was successfully created, the user JavaScript object will be passed into the parameter of the second `.then()`, which we can then send back to the client.
+```javascript
+.then(user => res.status(200).send(user))
+```
+If you try running the application now, you'll actually be able to create a user – but you will still get errors because we haven't written created the `GET` route for `/home` in `index.js` yet!
+
+## Part 5: Rendering the Homepage
+### Dog API
+The Homepage will be responsible for displaying a list of dogs which a user can adopt!
+To do so, we will be using the Dog API (https://dog.ceo/dog-api/)
+Specifically, we be using the `/api/breed/{breed name}/images/random` route to retrieve a random image of a dog.
+Because the images retrieved can be pretty large, we'll only be retrieving seven images for right now. Let's define an array of breeds at the top of the function.
+```javascript
+const breeds = [
+    'maltese',
+    'terrier',
+    'pug',
+    'akita',
+    'labrador',
+    'shihtzu',
+    'pomeranian',
+  ];
+```
+### Promise.all()
+*Note: This section is by nature hard to understand. If you're having trouble, don't be afraid to reach out to one of e-board.*
+
+Although we've worked with using Promises to retrieve the results of one `fetch`, what happens if we want to retrieve a bunch of them at the same time, and execute some code when all of them have completed?
+
+Let's think about how we can do this. Take the following code for example:
+```javascript
+const results = [];
+for (let i = 0; i < breeds.length; i++) {
+    fetch(...)
+        .then(res => results.push(res))
+        .catch(...);
+}
+return results;
+```
+Because Promises are asynchronous, there is no guarantee that all of the network requests will have finished when we return `results`.
+
+What about a giant Promise chain?
+```javascript
+const results = [];
+fetch(url_1)
+    .then(res => {
+        results.push(res);
+        fetch(url_2).then(res => {
+            results.push(res);
+            fetch(url_3).then(...)
+            // You get the point
+        });
+    })
+    .catch(...);
+```
+*Technically* this could work, but code is extremely messy and prone to error.
+
+That's where `Promise.all()` comes in handy.
+It takes in an **array** of pending Promises and returns a **single** Promise that will be resolved when all of the pending Promises are successfully resolved. When `Promise.all()` resolves, it returns an array of results corresponding to the Promises passed in.
+```javascript
+const promises = [promise_1, promise_2, promise_3];
+Promise.all(promises)
+    .then(results => console.log(results))
+    .catch(...);
+// console: [result #1, result #2, result #3]
+```
+Let's think about what we need to do.
+
+ 1. Create an array of promises from the list of breeds.
+ 2. Turn the array of promises into one promise with `Promise.all()`
+ 3. Write the code to handle `resolving` and `rejecting` the Promise.
+
+We can use JavaScript's built-in `.map()` method to create the array of Promises. When called on an Array, `.map()` iterates over each element and returns a brand-new Array, applying the given transformation to each element.
+
+```javascript
+// Don't forget to npm install --save node-fetch and require it at the top of your file!
+const fetchPromises = breeds.map(breed => fetch(url));
+```
+Next, we turn this into one Promise.
+```JS
+Promise.all(fetchPromises)
+    .then(bodies => {
+        ...
+    })
+```
+If you remember from the previous lessons, resolving a `fetch` returns the Body of the response. We need to then turn each body into JSON format.
+**How?**
+Create a new array of Promises and use `Promise.all()` again.
+```JS
+Promise.all(fetchPromises)
+    .then(bodies => {
+        const jsonPromises = bodies.map(body => body.json());
+        return Promise.all(jsonPromises);
+    })
+```
+Since `Promise.all()` returns a Promise itself, we have to write another `.then()`!
+```JS
+    .then(dogs => {
+        console.log(dogs);
+    })
+    .catch(...);
+```
+If all goes well, your console should print something like this!
+```
+[
+    {
+        "status": "success",
+        "message": <some-image-url>
+    },
+    {
+        ...
+    }
+]
+```
+### Generating random data
+We still need to generate information about the dogs
+
+ - gender
+ - name
+ - birthday
+
+We will be using chance.js (http://chancejs.com/) to perform our random data generation.
+```
+npm install --save chance
+```
+Back in `index.js`, add chance as a dependency, and instantiate it.
+```JS
+const Chance = require('chance');
+const chance = new Chance();
+```
+The functions we are interested in are:
+
+ - `chance.gender()`
+ - `chance.birthday()`
+ - `chance.name()`
+
+In the final `.then()` of `/home` route, instead of calling `console.log`, iterate over the array of dogs and set its `name`, `gender`, and `birthday` attributes to values generated by chance.js.
+Once you are done adding these attributes to each dog in the array, call render the "home" view, and pass in the array, `dogs`, as the second parameter.
+
+This code can be pretty tricky, so definitely don't be afraid to put `console.log()` statements everywhere and see where errors are occurring. You can also look at the completed code for reference.
 
 ----------
 
@@ -242,3 +399,5 @@ router.post('/', (req, res) => {
 - Mongoose Docs: http://mongoosejs.com/index.html
 - Promise.all: https://developer.mozilla.org/enUS/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
 -  ES6 Arrow Functions: https://codeburst.io/javascript-arrow-functions-for-beginners-926947fc0cdc
+
+
