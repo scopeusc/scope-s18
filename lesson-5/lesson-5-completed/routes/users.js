@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const router = express.Router();
 
@@ -13,7 +14,13 @@ router.post('/', (req, res) => {
       if (user) {
         throw `${username} already exists.`;
       }
-      const newUser = new User(req.body);
+
+      const salt = bcrypt.genSaltSync();
+      const data = {
+        username: req.body.username,
+        password: bcrypt.hashSync(req.body.password, salt)
+      }
+      const newUser = new User(data);
       return newUser.save();
     })
     .then(user => res.status(200).send(user))

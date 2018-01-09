@@ -77,7 +77,7 @@ passport.use('local', new LocalStrategy(
 
       // User doesn't exist
       if (!user) {
-        return done(null, false, { message: 'No User Found!' }));
+        return done(null, false, { message: 'No User Found!' });
       }
 
       // Password doesn't match
@@ -114,4 +114,4 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
-export default app;
+module.exports = app;
