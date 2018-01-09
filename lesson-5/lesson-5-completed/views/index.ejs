@@ -1,12 +1,73 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>Scope Lesson 4</title>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css' />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script>
+
+      window.onload = function() {
+        console.log(Cookies.get('username'))
+        if (Cookies && Cookies.get('username')) {
+          document.getElementById('login-container').remove();
+          const el = document.createElement('div');
+          el.className = 'spinner';
+          document.body.appendChild(el);
+          window.location = '/home';
+        }
+      }
+
+      function login() {
+        const username = document.getElementById('input-username').value;
+        if (!username) {
+          alert('Username cannot be empty!');
+        } else if (Cookies.get('username')) {
+          console.log('I HAVE COOKIE');
+        }
+        else {
+          fetch('/api/users/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username }),
+          }).then((res) => {
+            if (res.status === 200) {
+              // Set the cookie to assert that we are logged in
+              Cookies.set('username', username);
+              window.location = '/home';
+            } else {
+              alert('Username already exists!');
+              document.getElementById('input-username').value = '';
+            }
+          });
+        }
+      }
+    </script>
   </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+  <body style="display: flex; height: 100VH; align-items: center; justify-content: center;">
+    <div id="login-container" class="container">
+      <div class="card login">
+        <img class="card-img-top" src="http://ghk.h-cdn.co/assets/17/30/980x490/landscape-1500925839-golden-retriever-puppy.jpg" alt="Card image cap"/>
+        <div class="card-body">
+          <h2 class="card-title text-center">
+            Dog Adoption
+          </h2>
+          <div class="container">
+            <div class="form-detail">
+              <label for="exampleInputEmail1">Enter Username Below:</label>
+              <input id="input-username" type="email" class="form-control" placeholder="Username">
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="login()">Login!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>
