@@ -39,7 +39,7 @@ Add this to the top of `index.js`
 ````
 const Clarifai = require('clarifai');
 ````
-Then add this below all the require statements. This will get your API key out of the clarifai.json file. We need an API key in order to make any calls to the API.
+Then add this below all the require statements. This will get your API key out of the `clarifai.json` file. We need an API key in order to make any calls to the API.
 ````
 // API key
 const apiKey = require('../config/clarifai.json').key;
@@ -49,7 +49,7 @@ const app = new Clarifai.App({
     apiKey: apiKey
 });
 ````
-Then open the clarifai.json file and replace with your API key which can be found at
+Then open the `clarifai.json` file and replace with your API key which can be found at
 [https://clarifai.com/developer/account/keys] 
 
 
