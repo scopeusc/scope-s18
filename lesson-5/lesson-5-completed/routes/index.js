@@ -1,5 +1,9 @@
 const express = require('express');
 const passport = require('passport');
+const fetch = require('node-fetch');
+const Chance = require('chance');
+const User = require('../models/user');
+const chance = new Chance();
 const router = express.Router();
 
 /* GET home page. */
@@ -8,23 +12,17 @@ router.get('/', (req, res, next) => {
 });
 
 // Login Logic
-router.post('/login',
-  passport.authenticate('local', { failureRedirect: '/' }),
-  (req, res) => {
-    // User logged in successfully!
-    res.status(200).send();
-  }
-);
+router.post('/login', passport.authenticate('local'), function(req, res) {
+  res.status(200).send();
+});
 
-router.post('/logout',
-  (req, res) => {
-    if(req.isAuthenticated()){
-      req.logout();
-    }
-
-    res.redirect('/');
+router.post('/logout', (req, res) => {
+  if(req.isAuthenticated()){
+    req.logout();
   }
-);
+
+  res.status(200).send();
+});
 
 // Views
 router.get('/home', (req, res) => {

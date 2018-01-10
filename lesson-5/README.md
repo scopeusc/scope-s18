@@ -213,6 +213,8 @@ Before we write our login logic, Passport must have a protocol of serializing/de
 
 In this case, the easiest method of serialization is via user id. As so, go into your `app.js` and write serialize function shown in the snippet below.
 
+Also, make sure to write this **before** we configure our routes (e.g. `app.use('/', index)`).
+
 ```JS
 // Passport serialization
 passport.serializeUser(function(user, done) {
@@ -280,6 +282,7 @@ Let's start off with our basic strategy definition:
 ```JS
 passport.use('local', new LocalStrategy(
   function(username, password, done) {
+    ...
   }
 ));
 ```
@@ -319,10 +322,14 @@ passport.use('local', new LocalStrategy(
 
 Finally, let our app use passport
 ```JS
-// Make sure this is below the code where the app uses express-session
+// Make sure this is below the code where the app uses express-session, and above the code where the app uses its routes
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+...
+
+app.use('/', index);
 ```
 
 ## Part 4: Writing our Login Routes
