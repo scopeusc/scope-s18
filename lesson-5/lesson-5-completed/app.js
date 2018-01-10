@@ -48,11 +48,6 @@ app.use(session({
   saveUninitialized: true
 }));
 
-
-// Configure our routes
-app.use('/', index);
-app.use('/api/users', users);
-
 // Passport configuration
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -92,6 +87,10 @@ passport.use('local', new LocalStrategy(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Configure our routes
+app.use('/', index);
+app.use('/api/users', users);
 
 // Connect to MongoDB
 mongoose.connect(dbUri);

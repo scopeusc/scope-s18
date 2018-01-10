@@ -37,11 +37,15 @@
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({ username, password }),
-          }).then((res) => {
-            if (res.status === 200) {
+          })
+          .then((res) => {
+            if (res.ok) {
               alert(`Created User ${username}`);
             }
-          });
+            else {
+              res.json().then(res => alert(`Error: ${res.error}`));
+            }
+          })
         }
       }
 
@@ -61,17 +65,18 @@
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({ username, password }),
-          }).then((res) => {
-            if (res.status === 200) {
+          })
+          .then(res => {
+            if(res.ok) {
               window.location = '/home';
             }
-          });
+          })
         }
       }
     </script>
   </head>
-  <body style="display: flex; height: 100VH; align-items: center; justify-content: center;">
-    <div id="login-container" class="container">
+  <body style="display: flex; align-items: center; justify-content: center;">
+    <div id="login-container" class="container" style="margin: 50px">
       <div class="card login">
         <img class="card-img-top" src="http://ghk.h-cdn.co/assets/17/30/980x490/landscape-1500925839-golden-retriever-puppy.jpg" alt="Card image cap"/>
         <div class="card-body">
