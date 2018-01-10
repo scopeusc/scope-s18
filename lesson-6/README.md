@@ -312,7 +312,7 @@ As a student you get a free domain from namecheap, so go ahead and register one 
 
 The only thing you need to do once you've registered it is to change the name servers to `ns1.digitalocean.com`, `ns2.digitalocean.com` and `ns3.digitalocean.com`, seen below
 
-TODO: Insert pic
+<img src="https://i.imgur.com/vXpBZgi.png">
 
 Now go to Digital Ocean, and go to Networking -> Domains
 
