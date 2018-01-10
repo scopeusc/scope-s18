@@ -5,6 +5,7 @@ This lesson will add on to some of the concepts taught in Lesson 4 by adding an 
 ## Part 1: Setup
 
 **Setting up the project**
+
 Inside the `lesson-5` directory, create a new directory called `lesson-5-<your-name>` and `cd` into it.
 
 Create a Node.js project by typing the following:
@@ -21,6 +22,7 @@ npm install --save express
 ‎
 
 **Creating the Express.js project**
+
 Make sure you are in the same directory with `package.json`. You should have `express-generator` globally installed from the previous projects.
 ```
 express --view=ejs
