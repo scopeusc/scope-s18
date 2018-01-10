@@ -35,7 +35,7 @@ Having a customized environment is one of the first steps to improving your work
 
 3. Depending on your package manager, type `yarn install` or `npm install`. This will install all required modules and dependencies.
 
-4. Run the server with `node bin/www` or with the green start button in the top right of WebStorm
+4. Run the server with `npm start` or with the green start button in the top right of WebStorm
 
 5. Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
 
