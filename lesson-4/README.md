@@ -381,7 +381,6 @@ const Chance = require('chance');
 const chance = new Chance();
 ```
 The functions we are interested in are:
-
  - `chance.gender()`
  - `chance.birthday()`
  - `chance.name()`
