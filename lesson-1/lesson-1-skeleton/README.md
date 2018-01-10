@@ -45,7 +45,6 @@ npm start
  - routes: All of your routing logic goes here (handling `POST`, `GET`, etc...)
  - views: Where your frontend views live.
  - app.js: The actual express app itself.
- -
 
 
 ----------
