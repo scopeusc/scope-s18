@@ -28,22 +28,20 @@ Having a customized environment is one of the first steps to improving your work
 ## Steps
 
 1. If you're using WebStrom, simply open it and click "Import Project", and select the root of this folder (lesson-0). It should automatically get everything set up for you.
+    1. If you choose to use a different IDE, simply open the project folder in that IDE. 
 
-1a. If you choose to use a different IDE, simply open the project folder in that IDE. 
+1. Open a shell and navigate to the folder `lesson-0`
 
-2. Open a shell and navigate to the folder `lesson-0`
+1. Depending on your package manager, type `yarn install` or `npm install`. This will install all required modules and dependencies.
 
-3. Depending on your package manager, type `yarn install` or `npm install`. This will install all required modules and dependencies.
+1. Run the server with `node bin/www` or with the green start button in the top right of WebStorm
 
-4. Run the server with `npm start` or with the green start button in the top right of WebStorm
+1. Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
+    1. Test the debugger in WebStorm - go to `routes/index.js` and add a breakpoint on line 5 ( click the line number on the left)
 
-5. Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
+1. Next, stop your app with the red square in the top right, and run it in debug mode (click the bug to the right of the start button)
 
-5a. Test the debugger in WebStorm - go to `routes/index.js` and add a breakpoint on line 5 ( click the line number on the left)
-
-6. Next, stop your app with the red square in the top right, and run it in debug mode (click the bug to the right of the start button)
-
-7. Navigate to [http://localhost:3000](http://localhost:3000) again - this time, it should switch over to the debug menu of WebStorm, where you can step over lines and inspect variables.
+1. Navigate to [http://localhost:3000](http://localhost:3000) again - this time, it should switch over to the debug menu of WebStorm, where you can step over lines and inspect variables.
 
 ## Additional Steps
 
