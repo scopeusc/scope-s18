@@ -32,9 +32,6 @@ This creates an Express application in your current directory and sets `ejs` to 
 ----------
 
 ## Part 2: Updating our User model and User POST route
-
-‎
-
 ### We need some security
 
 In the previous lesson, we logged in simply by passing in a username. Doesn't that mean anyone could log into anyone account? YES 😠. We also need to store a password on our Mongoose model.
