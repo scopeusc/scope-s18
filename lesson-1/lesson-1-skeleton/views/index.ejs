@@ -1,0 +1,64 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>/r/dogs</title>
+
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css'>
+    <link rel='stylesheet' href='/stylesheets/style.css'>
+  </head>
+
+  <body>
+    <div class='header'>
+      <li>My Subreddits</li>
+      <li onclick='location.assign("http://www.reddit.com/r/jonluca")')>r/jonluca</li>
+    </div>
+
+    <div class='main'>
+      <div class='banner'>
+        <img src='../images/background.jpg' />
+      </div>
+
+      <div class='title'>
+        <img src='//b.thumbs.redditmedia.com/Sgqw1zW5DO9gHEOhJtVxS_hC7pIzOoRgokC-xqfUmWI.png' />
+        <h1 onclick='window.location.href="/"'>/r/dogs</h1>
+      </div>
+
+      <div class='list-view'>
+        <% if (dogs) {
+            dogs.forEach(function(dog) { 
+        %>
+              <div class='list-item'>
+                <div class='vote-container'>
+                  <img src='../images/up-arrow.svg', onclick='handleClick(this, "<%= dog.name %>", "POST")' />
+                  <p><%= dog.rating %></p>
+                  <img src='../images/down-arrow.svg', onclick='handleClick(this, "<%= dog.name %>", "DELETE")' />
+                </div>
+
+                <img src="<%= dog.imageUrl %>" />
+                <a href="<%= dog.name %>"><%= dog.name %></a>
+              </div>
+        <%  })
+          } else {
+        %>
+          <div>
+            <h2>No Content :(</h2>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <script>
+      async function handleClick(el, name, method) {
+        const response = await fetch(`/dogs/${name}/vote`, { method });
+        if (response.status === 200) {
+          if (method === 'POST') {
+            el.nextElementSibling.innerHTML = parseInt(el.nextElementSibling.innerHTML) + 1;
+          } else {
+            el.previousElementSibling.innerHTML = parseInt(el.previousElementSibling.innerHTML) - 1;
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
