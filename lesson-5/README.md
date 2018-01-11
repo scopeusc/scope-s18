@@ -431,7 +431,6 @@ If the request is unauthenticated (dictated by the session cookie), we will rend
 > Using the idea of Express' callback chain, and this authentication checker, can you combine the topics to create a reusable middleware to determine if someone's logged in? Also note, that callbacks in Express can actually take in 3 parameters, `res`, `req`, and `next`. `next` is specifically a way to call the next callback in the callback chain.
 
 If you want to see the answer, check out the code in `lesson-5-completed`.
-‎
 
 ‎
 
@@ -443,11 +442,15 @@ Run the app with `npm start` and check it out on `localhost:3000`.
 
 This is a modified version of the Landing Page on the previous app. First, create a user giving any set of credentials, then log them in by filling out those exact credentials on the Login panel. Upon login, you should be redirected to the Home Page again.
 
+![Website](https://i.imgur.com/BzuXuHz)
+
 To see if things are working, (if you're on Chrome) open up the Chrome Developer Tools (Shift + Cmd + C) and:
 
 1. Click on the tab that says **Application**
 1. Click on Cookies > localhost:3000
 1. You should see a cookie that says `connect.sid` which is how `express-session` is storing its cookies.
+
+![Chrome Dev Tools](https://i.imgur.com/Eg5mVkM)
 
 Now you should be able to reload on `localhost:3000/home` without getting authorization errors.
 
