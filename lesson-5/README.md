@@ -33,13 +33,19 @@ This creates an Express application in your current directory and sets `ejs` to 
 
 ## Part 2: Updating our User model and User POST route
 
+‎
+
 ### We need some security
 
 In the previous lesson, we logged in simply by passing in a username. Doesn't that mean anyone could log into anyone account? YES 😠. We also need to store a password on our Mongoose model.
 
+‎
+
 ### Add a Password field to our User model
 
 Go into `models/user.js`, and add a field called `password` which is **required** and is of type `String` (identical structure to the username field defined)
+
+‎
 
 ### Updating our Create User route
 
@@ -55,6 +61,8 @@ if (!username) {
 // Be creative, like checking to see if the password is at least 8 characters long, etc.
 ```
 
+‎
+
 ### A Lil' Cryptography Aside
 
 Now, when we store passwords on our database, we don't want to store the plaintext password because that's bad! If a hacker manages to get in our database, they have access to all of our user's passwords.
@@ -66,6 +74,8 @@ However, we have another problem. A lot of known password hashes are saved throu
 Hence, our solution is to hash our password with an additional string called a **salt**. The salt is unknown to the hacker which defends our database from a Rainbow Table attack.
 
 Don't worry though, all this can be done for us with an npm module. Yay!
+
+‎
 
 ### Back to updating our route
 
@@ -121,6 +131,8 @@ const MongoDBStore = require('connect-mongo')(session);
 
 The second dependency `connect-mongo` takes in `express-session` as a parameter, so remember to do that!
 
+‎
+
 ### Creating the Store
 
 The store is essentially a module that will handle all of the logic involving storing the actual Sessions in our database.
@@ -142,6 +154,8 @@ const store = new MongoDBStore({
 
 * The `uri` field specifies where our URI of our Mongo instance
 * The `collection` field specifies what we want to name our document used for storing sessions. In this case, `Sessions`
+
+‎
 
 ### Creating the Session Middleware
 
@@ -185,6 +199,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 ```
 
+‎
+
 ### Motivation
 
 Passport is an authentication middleware which helps you authenticate requests. In addition, Passport offers multiple methods authentication known as "Strategies". Strategies include Facebook, Google, or even Github OAuth.
@@ -192,6 +208,8 @@ Passport is an authentication middleware which helps you authenticate requests. 
 Passport allows a very general way our authentication strategies (in the case we need to have multiple login buttons), which makes it easier to integrate a lot of different types of logins.
 
 In this case we will be working with a Local Strategy with authentication involving users in our own database.‎
+
+‎
 
 ### Serializing and Deserializing our users
 
@@ -251,6 +269,8 @@ passport.deserializeUser(function(id, done) {
 
 Simple right? Now that that's out of the way, let's get into our login logic!
 
+
+‎
 
 ### Writing our Local Login Strategy
 
@@ -357,6 +377,8 @@ In addition, in our `passport.authenticate` function we pass in `'local'` as the
 
 Finally, if everything passes, we send an empty **200 OK** response stating that the login credentials were correct. If the login credentials weren't correct, `passport.authenticate` will return **401 Unauthorized** status code.
 
+‎
+
 ### Logout
 
 Passport also adds the following functions to the `req` object:
@@ -380,6 +402,8 @@ router.get('/logout', (req, res) => {
 ```
 
 Essentially we just test if the current user has a session via `req.isAuthenticated()`, if so, we'll log them out with `req.logout`. Finally, we'll send a **200 OK** response regardless. You might want to send a **400** if you weren't able to log the user out correctly, but that's very rare.
+
+‎
 
 ### Route Protection
 
@@ -409,6 +433,8 @@ If the request is unauthenticated (dictated by the session cookie), we will rend
 If you want to see the answer, check out the code in `lesson-5-completed`.
 ‎
 
+‎
+
 ### Testing it out!
 
 Sorry it took this long to get everything running! We had to write all of the pieces before we could actually test anything out.
@@ -427,6 +453,8 @@ Now you should be able to reload on `localhost:3000/home` without getting author
 
 Click on **Logout** and now go to [localhost:3000/home](localhost:3000/home) and suddenly you should see an error saying **Unauthorized Access 401**.
 
+‎
+
 ### Now what the fuck is going on? (For the curious)
 
 So you've written all these bits and pieces, but what exactly is going on behind the scenes? Let's go step-by-step on the login process:
@@ -436,11 +464,11 @@ So you've written all these bits and pieces, but what exactly is going on behind
 1. Seeing the key `'local'`, Passport runs the LocalStrategy on the username and password you passed in from the request (Using `request.body`).
 1. Once it validates the existence of the user, and a matching password hash, it will call the `done` callback with the user, calling the `serializeUser()` function.
 1. `serializeUser()` will return the user's id which will be passed into a Mongo document under the collection `sessions` and stored in the MongoStore.
-  1. In addition, this Mongo document's id will be passed to the frontend as a cookie called `connect.sid`
+    1. In addition, this Mongo document's id will be passed to the frontend as a cookie called `connect.sid`
 1. Finally, it will run the callback we wrote, sending a **200 OK** request.
 
 Don't worry if that doesn't make sense, assume we have these blackboxes of code for now that will authenticate our code and upon doing more web dev, you should slowly start to realize the cogs in the machine. I honestly finally understood everything after writing this lesson :3
-- Alex
+\- Alex
 
 Congratulations on creating a working login & authentication system!
 
