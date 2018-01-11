@@ -442,7 +442,7 @@ Run the app with `npm start` and check it out on `localhost:3000`.
 
 This is a modified version of the Landing Page on the previous app. First, create a user giving any set of credentials, then log them in by filling out those exact credentials on the Login panel. Upon login, you should be redirected to the Home Page again.
 
-![Website](https://i.imgur.com/BzuXuHz)
+<img src="https://i.imgur.com/BzuXuHz">
 
 To see if things are working, (if you're on Chrome) open up the Chrome Developer Tools (Shift + Cmd + C) and:
 
@@ -450,7 +450,7 @@ To see if things are working, (if you're on Chrome) open up the Chrome Developer
 1. Click on Cookies > localhost:3000
 1. You should see a cookie that says `connect.sid` which is how `express-session` is storing its cookies.
 
-![Chrome Dev Tools](https://i.imgur.com/Eg5mVkM)
+<img src="https://i.imgur.com/Eg5mVkM">
 
 Now you should be able to reload on `localhost:3000/home` without getting authorization errors.
 
