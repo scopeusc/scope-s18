@@ -67,23 +67,19 @@ passport.use('local', new LocalStrategy(
   function(username, password, done) {
     User.findOne({ username: username }, function (err, user) {
       if (err) {
-        console.log(err)
         return done(err);
       }
 
       // User doesn't exist
       if (!user) {
-        console.log('USER DONT EXIST');
         return done(null, false, { message: 'No User Found!' });
       }
 
       // Password doesn't match
       if (!bcrypt.compareSync(password, user.password)) {
-        console.log('PASSWORDD DONT MATCH')
         return done(null, false, { message: 'Password does not match!' });
       }
 
-      console.log(user);
       return done(null, user);
     });
   }

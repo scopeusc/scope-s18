@@ -176,7 +176,6 @@ Make sure to install the following before we get started
 npm install --save passport passport-local
 ```
 
-
 Next, in our `app.js` make sure to include the new dependencies we installed.
 
 ```JS
@@ -186,17 +185,13 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 ```
 
-‎
-
 ### Motivation
 
 Passport is an authentication middleware which helps you authenticate requests. In addition, Passport offers multiple methods authentication known as "Strategies". Strategies include Facebook, Google, or even Github OAuth.
 
 Passport allows a very general way our authentication strategies (in the case we need to have multiple login buttons), which makes it easier to integrate a lot of different types of logins.
 
-In this case we will be working with a Local Strategy with authentication involving users in our own database.
-
-‎
+In this case we will be working with a Local Strategy with authentication involving users in our own database.‎
 
 ### Serializing and Deserializing our users
 
@@ -432,8 +427,28 @@ Now you should be able to reload on `localhost:3000/home` without getting author
 
 Click on **Logout** and now go to [localhost:3000/home](localhost:3000/home) and suddenly you should see an error saying **Unauthorized Access 401**.
 
-### Now what the fuck is going on?
+### Now what the fuck is going on? (For the curious)
 
 So you've written all these bits and pieces, but what exactly is going on behind the scenes? Let's go step-by-step on the login process:
 
-1. You pass in your credentials to the login panel and it sends a **POST** request
+1. You pass in your credentials to the login panel and it sends a **POST** request to the server.
+1. The server redirects you to the code on `router.post('/login', ...)` which first runs `passport.authenticate('local')`
+1. Seeing the key `'local'`, Passport runs the LocalStrategy on the username and password you passed in from the request (Using `request.body`).
+1. Once it validates the existence of the user, and a matching password hash, it will call the `done` callback with the user, calling the `serializeUser()` function.
+1. `serializeUser()` will return the user's id which will be passed into a Mongo document under the collection `sessions` and stored in the MongoStore.
+  1. In addition, this Mongo document's id will be passed to the frontend as a cookie called `connect.sid`
+1. Finally, it will run the callback we wrote, sending a **200 OK** request.
+
+Don't worry if that doesn't make sense, assume we have these blackboxes of code for now that will authenticate our code and upon doing more web dev, you should slowly start to realize the cogs in the machine. I honestly finally understood everything after writing this lesson :3
+- Alex
+
+Congratulations on creating a working login & authentication system!
+
+## Glossary and Useful Links
+
+* https://scotch.io/tutorials/easy-node-authentication-setup-and-local
+* http://toon.io/understanding-passportjs-authentication-flow/
+* http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/
+
+| Acronym/word | Definition |
+| -------- | -------- |
