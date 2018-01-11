@@ -64,10 +64,12 @@
             headers: {
               'Content-Type': 'application/json',
             },
+            credentials: "same-origin",
             body: JSON.stringify({ username, password }),
           })
           .then(res => {
             if(res.ok) {
+              Cookies.set('username', username);
               window.location = '/home';
             }
           })

@@ -23,6 +23,7 @@
             headers: {
               'Content-Type': 'application/json',
             },
+            credentials: "same-origin",
             body: JSON.stringify({ username: Cookies.get('username'), dog }),
           }).then((res) => {
             if (res.status === 204) {
@@ -44,14 +45,10 @@
       }
 
       function logout() {
-        fetch('/logout', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        })
+        fetch('/logout')
         .then((res) => {
           if (res.ok) {
+            Cookies.remove('username', { path: '/' });
             window.location = '/';
           }
         });

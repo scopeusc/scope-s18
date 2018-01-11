@@ -4,7 +4,7 @@ This lesson will add on to some of the concepts taught in Lesson 4 by adding an 
 
 ## Part 1: Setup
 
-**Setting up the project**
+### Setting up the project
 
 Inside the `lesson-5` directory, create a new directory called `lesson-5-<your-name>` and `cd` into it.
 
@@ -21,7 +21,7 @@ npm install --save express
 
 ‎
 
-**Creating the Express.js project**
+### Creating the Express.js project
 
 Make sure you are in the same directory with `package.json`. You should have `express-generator` globally installed from the previous projects.
 ```
@@ -33,19 +33,15 @@ This creates an Express application in your current directory and sets `ejs` to 
 
 ## Part 2: Updating our User model and User POST route
 
-**We need some security**
+### We need some security
 
 In the previous lesson, we logged in simply by passing in a username. Doesn't that mean anyone could log into anyone account? YES 😠. We also need to store a password on our Mongoose model.
 
-‎
-
-**Add a Password field to our User model**
+### Add a Password field to our User model
 
 Go into `models/user.js`, and add a field called `password` which is **required** and is of type `String` (identical structure to the username field defined)
 
-‎
-
-**Updating our Create User route**
+### Updating our Create User route
 
 First, add validation to ensure the existence of a `password` field in our request body. Write this code under the part where we check for the existence of a `username` field.
 
@@ -59,9 +55,7 @@ if (!username) {
 // Be creative, like checking to see if the password is at least 8 characters long, etc.
 ```
 
-‎
-
-**A Lil' Cryptography Aside**
+### A Lil' Cryptography Aside
 
 Now, when we store passwords on our database, we don't want to store the plaintext password because that's bad! If a hacker manages to get in our database, they have access to all of our user's passwords.
 
@@ -73,9 +67,7 @@ Hence, our solution is to hash our password with an additional string called a *
 
 Don't worry though, all this can be done for us with an npm module. Yay!
 
-‎
-
-**Back to updating our route**
+### Back to updating our route
 
 Install the following:
 ```
@@ -111,11 +103,11 @@ Next, we create our password hash using `bcrypt.hashSync` and save our new user 
 
 
 ## Part 3: Initializing the Session middleware and store
-**Installing our dependencies**
+### Installing our dependencies
 
 Make sure to install the following before we get started
 ```
-npm install --save express-session connect-mongodb-session
+npm install --save express-session connect-mongo
 ```
 
 Next, in our `app.js` make sure to include the new dependencies we installed.
@@ -124,14 +116,12 @@ Next, in our `app.js` make sure to include the new dependencies we installed.
 const express = require('express');
 ...
 const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
+const MongoDBStore = require('connect-mongo')(session);
 ```
 
-The second dependency `connect-mongodb-session` takes in `express-session` as a parameter, so remember to do that!
+The second dependency `connect-mongo` takes in `express-session` as a parameter, so remember to do that!
 
-‎
-
-**Creating the Store**
+### Creating the Store
 
 The store is essentially a module that will handle all of the logic involving storing the actual Sessions in our database.
 
@@ -141,19 +131,19 @@ Copy and paste the following code after you initialize your app's static directo
 ...
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Create our session store
+// Connect to MongoDB
+mongoose.connect(dbUri);
+
+// Create and link our session store
 const store = new MongoDBStore({
-  uri: 'mongodb://scope:scope@ds064799.mlab.com:64799/scope-lesson-4',
-  collection: 'Sessions'
-})
+  mongooseConnection: mongoose.connection
+});
 ```
 
 * The `uri` field specifies where our URI of our Mongo instance
 * The `collection` field specifies what we want to name our document used for storing sessions. In this case, `Sessions`
 
-‎
-
-**Creating the Session Middleware**
+### Creating the Session Middleware
 
 [express-session](https://github.com/expressjs/session) is a module that will do all the heavy-lifting related to creating our Session data on the store we also just created. Essentially, it updates/creates new sessions for users via cookies, and saves the session data on your database.
 
@@ -163,7 +153,6 @@ Copy and paste the following code to use the initialize the session middleware.
 app.use(session({
   secret: 'keyboard cat',
   store: store,
-  cookie: { secure: true },
   resave: true,
   saveUninitialized: true
 }));
@@ -171,14 +160,16 @@ app.use(session({
 
 * The `secret` field is a string or array of strings used to sign the cookie (We don't have to worry about this since we aren't actually deploying our site)
 * The `store` field specifies what store it will use (In this case the MongoDBStore we just created)
-* The `cookie` field specifies the settings for the session cookies
 
 We don't have to worry about the `resave` and `saveUninitialized` fields. If you want to understand more in-depth on how this works, check out the docs!
 
-
+**ALSO** remember to remove the line that says, we won't need it anymore
+```JS
+app.use(cookieParser());
+```
 
 ## Part 4: Setting up Passport
-**Installing our dependencies**
+### Installing our dependencies
 
 Make sure to install the following before we get started
 ```
@@ -197,7 +188,7 @@ const bcrypt = require('bcryptjs');
 
 ‎
 
-**Motivation**
+### Motivation
 
 Passport is an authentication middleware which helps you authenticate requests. In addition, Passport offers multiple methods authentication known as "Strategies". Strategies include Facebook, Google, or even Github OAuth.
 
@@ -207,7 +198,7 @@ In this case we will be working with a Local Strategy with authentication involv
 
 ‎
 
-**Serializing and Deserializing our users**
+### Serializing and Deserializing our users
 
 Before we write our login logic, Passport must have a protocol of serializing/deserializing our users into sessions (e.g. a method of compressing the user object into a single string)
 
@@ -265,9 +256,8 @@ passport.deserializeUser(function(id, done) {
 
 Simple right? Now that that's out of the way, let's get into our login logic!
 
-‎
 
-**Writing our Local Login Strategy**
+### Writing our Local Login Strategy
 
 Strategies in Passport are defined with the following function
 
@@ -333,12 +323,117 @@ app.use('/', index);
 ```
 
 ## Part 4: Writing our Login Routes
-**Login**
+### Login
+
+Now that we have our business logic done, let's finally write our login/logout routes!
+
+Let's first discuss the [Express routing syntax](http://expressjs.com/en/api.html#app.get.method)
+```JS
+router.get(url_path, callback [, callback...])
+```
+
+We've seen cases where we had to write our own callback looking like this:
+
+```JS
+router.get('/home', function (request, response) {
+  // or (req, res)
+  ...
+})
+```
+
+However, it is possible to add a chain of callbacks/functions to call in a sequence. In this case, passport gives us a function called `passport.authenticate('strategy_type')` which we will need to call right before our own callback.
+
+So, go into `routes/index.js`, and copy and paste the following code:
+
+```JS
+// Up in your imports
+const passport = require('passport');
+
+router.post('/login', passport.authenticate('local'), (req, res) => {
+  res.status(200).send();
+});
+```
+
+Simple right?
+
+This is a **POST** request, we pass in the `username` and `password` via the `request.body`.
+
+In addition, in our `passport.authenticate` function we pass in `'local'` as the strategy type because that's what we defined earlier for passport.
+
+Finally, if everything passes, we send an empty **200 OK** response stating that the login credentials were correct. If the login credentials weren't correct, `passport.authenticate` will return **401 Unauthorized** status code.
+
+### Logout
+
+Passport also adds the following functions to the `req` object:
+* `req.login` or `req.logIn`
+* `req.logout` or `req.logOut`
+* `req.isAuthenticated`
+* `req.isUnauthenticated`
+
+Note, we don't need to write `req.login` in our `/login` route because `passport.authenticate` does that for us.
+
+Our logout route is also fairly simple, copy and paste the following below:
+
+```JS
+router.get('/logout', (req, res) => {
+  if(req.isAuthenticated()){
+    req.logout();
+  }
+
+  res.redirect('/');
+});
+```
+
+Essentially we just test if the current user has a session via `req.isAuthenticated()`, if so, we'll log them out with `req.logout`. Finally, we'll send a **200 OK** response regardless. You might want to send a **400** if you weren't able to log the user out correctly, but that's very rare.
+
+### Route Protection
+
+Now that we have a login/logout route, let's protect the **GET** route on `/home`. Specifically, we can take advantage of `req.isUnauthenticated` to tell us whether the user is logged in or not.
+
+```JS
+router.get('/home', (req, res) => {
+  if(req.isUnauthenticated()) {
+    res.render('error', {
+      message: 'Unauthorized Access',
+      error: { status: 401 },
+    });
+  }
+
+  // Rest of the Route Logic
+  ...
+```
+
+If the request is unauthenticated (dictated by the session cookie), we will render the error view instead.
 
 ‎
 
-**Logout**
+**Extra Credit**
 
+> Using the idea of Express' callback chain, and this authentication checker, can you combine the topics to create a reusable middleware to determine if someone's logged in? Also note, that callbacks in Express can actually take in 3 parameters, `res`, `req`, and `next`. `next` is specifically a way to call the next callback in the callback chain.
+
+If you want to see the answer, check out the code in `lesson-5-completed`.
 ‎
 
-**Route Protection**
+### Testing it out!
+
+Sorry it took this long to get everything running! We had to write all of the pieces before we could actually test anything out.
+
+Run the app with `npm start` and check it out on `localhost:3000`.
+
+This is a modified version of the Landing Page on the previous app. First, create a user giving any set of credentials, then log them in by filling out those exact credentials on the Login panel. Upon login, you should be redirected to the Home Page again.
+
+To see if things are working, (if you're on Chrome) open up the Chrome Developer Tools (Shift + Cmd + C) and:
+
+1. Click on the tab that says **Application**
+1. Click on Cookies > localhost:3000
+1. You should see a cookie that says `connect.sid` which is how `express-session` is storing its cookies.
+
+Now you should be able to reload on `localhost:3000/home` without getting authorization errors.
+
+Click on **Logout** and now go to [localhost:3000/home](localhost:3000/home) and suddenly you should see an error saying **Unauthorized Access 401**.
+
+### Now what the fuck is going on?
+
+So you've written all these bits and pieces, but what exactly is going on behind the scenes? Let's go step-by-step on the login process:
+
+1. You pass in your credentials to the login panel and it sends a **POST** request

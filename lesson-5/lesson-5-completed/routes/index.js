@@ -8,24 +8,30 @@ const router = express.Router();
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  res.render('index', { title: 'Express' });
+  res.render('index');
 });
 
 // Login Logic
-router.post('/login', passport.authenticate('local'), function(req, res) {
+router.post('/login', passport.authenticate('local'), (req, res, next) => {
   res.status(200).send();
 });
 
-router.post('/logout', (req, res) => {
+router.get('/logout', (req, res) => {
   if(req.isAuthenticated()){
     req.logout();
   }
 
-  res.status(200).send();
+  res.redirect('/');
 });
 
 // Views
-router.get('/home', (req, res) => {
+router.get('/home', isLoggedIn, (req, res) => {
+  if(req.isUnauthenticated()) {
+    res.render('error', {
+      message: 'Unauthorized Access',
+      error: { status: 401 },
+    });
+  }
 
   const breeds = [
     'maltese',
@@ -55,12 +61,12 @@ router.get('/home', (req, res) => {
     .catch((error) => res.render('error', { error }));
 });
 
-router.get('/social', (req, res) => {
+router.get('/social', isLoggedIn, (req, res) => {
   User.find().then(users => res.render('social', { users }));
 });
 
 /* GET profile page. */
-router.get('/users/:username', (req, res) => {
+router.get('/users/:username', isLoggedIn, (req, res) => {
   const { username } = req.params;
 
   User.findOne({ username })
@@ -73,5 +79,16 @@ router.get('/users/:username', (req, res) => {
     })
     .catch(error => res.render('error', { error }));
 });
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+
+  res.render('error', {
+    message: 'Unauthorized Access',
+    error: { status: 401 },
+  });
+}
 
 module.exports = router;
