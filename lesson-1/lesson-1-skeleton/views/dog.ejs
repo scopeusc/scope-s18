@@ -1,0 +1,92 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>/r/dogs</title>
+
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css'>
+    <link rel='stylesheet' href='/stylesheets/style.css'>
+  </head>
+
+  <body>
+    <div class='header'>
+      <li>My Subreddits</li>
+      <li onclick='location.assign("http://www.reddit.com/r/jonluca")')>r/jonluca</li>
+    </div>
+
+     <div class='main'>
+      <div class='banner'>
+        <img src='../images/background.jpg' />
+      </div>
+
+      <div class='title'>
+        <img src='//b.thumbs.redditmedia.com/Sgqw1zW5DO9gHEOhJtVxS_hC7pIzOoRgokC-xqfUmWI.png' />
+        <h1 onclick='window.location.href="/"'>/r/dogs</h1>
+      </div>
+
+      <% if (dog) { %>
+        <div class='post-body'>
+          <div class='vote-container'>
+            <img src='../images/up-arrow.svg' onclick='handleClick(this, "<%= dog.name %>", "POST")' />
+            <p><%= dog.rating %></p>
+            <img src='../images/down-arrow.svg' onclick='handleClick(this, "<%= dog.name %>", "DELETE")' />
+          </div>
+
+          <div class='post-content'>
+            <img src='<%= dog.imageUrl %>' />
+          </div>
+        </div>
+
+        <div class='comment-section'>
+          <div class='write-comment'>
+            <h1>all <%= dog.comments.length %> comments:</h1>
+            <textarea id='comment'></textarea>
+          </div>
+
+          <button onclick='submitPost("<%= dog.name %>", document.getElementById("comment").value)'>Save</button>
+
+          <% dog.comments.forEach(function(comment) { %>
+            <div class='comment'>
+              <p><%= comment %></p>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div>
+          <h2>Nothing to show</h2>
+        </div>
+      <% } %>
+    </div>
+
+    <script>
+      async function handleClick(el, name, method) {
+        const response = await fetch(`/dogs/${name}/vote`, { method });
+        if (response.status === 200) {
+          if (method === 'POST') {
+            el.nextElementSibling.innerHTML = parseInt(el.nextElementSibling.innerHTML) + 1;
+          } else {
+            el.previousElementSibling.innerHTML = parseInt(el.previousElementSibling.innerHTML) - 1;
+          }
+        }
+      }
+
+      function submitPost(name, comment) {
+        const body = JSON.stringify({ comment });
+
+        fetch(`/dogs/${name}/comment`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body,
+        }).then((res) => {
+          if (res.status === 200) {
+            location.reload();
+          } else {
+            alert('There was an error submitting your comment.');
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

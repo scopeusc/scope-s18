@@ -67,15 +67,8 @@ router.get('/', (req, res) => {
 ```
 When you navigate to the homepage, you are making a GET request for `localhost:3001/`, which is handled by the above function. The first parameter passed into all routing functions in express is the **path**. The second is the **callback** to be executed once this path has been resolved. We're using the arrow function syntax here – it's equivalent to `function(req, res) { ... }` .
 
-Let's take a look at the "index" view that is rendered. Open up `views/index.pug` (pug is a templating engine that express uses to render HTML server-side. Notice this section:
-```
-if dogs
-    each dog in dogs
-        ...
-else
-    div
-        h2 No Content :(
-```
+Let's take a look at the "index" view that is rendered. Open up `views/index.ejs` (ejs is a templating engine that express uses to render HTML server-side). Notice the section lines 28-47.
+
 This template expects an array called "dogs" to be injected inside the template. There is second optional parameter that we can pass into `res.render`, which is a JavaScript object containing all of the local variables. In this case, our render function expects an object like this:
 ```
 {
@@ -227,5 +220,3 @@ If everything is correct, you should now be able to submit comments to the serve
 
  - Promises: https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-promise-27fc71e77261
  - Express Routing docs: http://expressjs.com/en/guide/routing.html
-
-
