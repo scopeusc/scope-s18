@@ -17,6 +17,7 @@ router.get('/', function(req, res, next) {
 /* POST handle form input */
 router.post('/predict', function(req, res, next) {
     const image = req.body.image;
+    // Alternatively, const { image } = req.body;
 
     // Connect to the Clarifai API using the prediction feature then feed it the URL passed in through our form
     app.models.predict(Clarifai.GENERAL_MODEL, image)
@@ -30,7 +31,7 @@ router.post('/predict', function(req, res, next) {
                 // If any of the tagged concepts is 'dog' then we determine that the image is a dog (Simple logic for now)
                 let verdict = false;
 
-                for (var c of concepts) {
+                for (const c of concepts) {
                     if (c.name === 'dog') {
                         verdict = true;
                         break;
