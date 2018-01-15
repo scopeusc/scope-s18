@@ -49,9 +49,9 @@ const app = new Clarifai.App({
     apiKey: apiKey
 });
 ```
-Then open the `clarifai.json` file and replace with your API key which can be found at
+Then open the `clarifai.json` file within the `config` directory and replace with your API key which can be found at
 [https://clarifai.com/developer/account/keys] 
-
+When we're dealing with API keys or sensitive data, it's usually good to decouple it from your JavaScript code and keep it in a configuration file.
 
 
 ### Using Clarifai
@@ -63,14 +63,14 @@ In `predict.ejs` you can see it displays the `image` and takes in a parameter `c
 Back in `index.js` below the code your just inserted should be the `GET` request for the home page:
 ```JS
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   res.render('index');
 });
 ```
 All APIs require sending a request. For this we will be making a `POST` request to the Clarifai API. Below that code insert this basic shell 
 ```JS
 /* POST Clarifai. */
-router.post('/predict', function(req, res, next) {  
+router.post('/predict', (req, res, next) => {  
  
 });
 ```
@@ -141,7 +141,7 @@ res.render('error', { message: 'Error trying to process that image. Likely a bad
 The whole thing should look like this:
 ```JS
 /* POST handle form input */
-router.post('/predict', function(req, res, next) {
+router.post('/predict', (req, res, next) => {
   const image = req.body.image;
 
   // Connect to the Clarifai API using the prediction feature then feed it the URL passed in through our form
