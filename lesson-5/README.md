@@ -6,28 +6,8 @@ This lesson will add on to some of the concepts taught in Lesson 4 by adding an 
 
 ### Setting up the project
 
-Inside the `lesson-5` directory, create a new directory called `lesson-5-<your-name>` and `cd` into it.
-
-Create a Node.js project by typing the following:
-```
-npm init
-```
-You should now see a `package.json` file inside your project directory.
-
-Make sure to install Express as a dependency.
-```
-npm install --save express
-```
-
-‎
-
-### Creating the Express.js project
-
-Make sure you are in the same directory with `package.json`. You should have `express-generator` globally installed from the previous projects.
-```
-express --view=ejs
-```
-This creates an Express application in your current directory and sets `ejs` to the default view engine. More cli options can be found at https://expressjs.com/en/starter/generator.html. For simplicity's sake, we will be using this relatively barebones configuration.
+Inside the `lesson-4` directory, copy over your completed code and paste it into the lesson `lesson-5` directory. Rename it `lesson-5-<your name>`. We will be using this code as a starting point for learning about Authentication! 
+If you weren't able to complete the code from last time, use the `lesson-4-completed` as the starting point.
 
 ----------
 
