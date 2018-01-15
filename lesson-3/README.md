@@ -1,5 +1,6 @@
-# Node Modules and APIs
 
+# Lesson 3: Node Modules and APIs
+## Introduction
 Each file can be thought of as a module in Node.js. This can be used to separate the functionality of your program. For example, load the module **tree.js** by using this syntax you might recognize from last lesson. 
 ```JS
 const tree = require('./tree.js');
@@ -11,18 +12,33 @@ Node has a few built-in modules that you can use without needing to require. If 
 [https://www.w3schools.com/nodejs/ref_modules.asp]
 
 
-## APIs
+## APIs and Project Setup
 More specially talking about APIs now, they can be thought of as a protocol for getting information between a source and someone who wants to use it. For example in a weather API, the developer will make a request for information. There are most commonly 2 types of HTTP requests, `GET` and `POST`. But 2 other popular ones are `PUT`, and `DELETE`, which was used in the last lesson.
 // Not sure if I should explain GET AND POST here... - AP
 
 ### Clarifai API
 Clarifai is an image and video recognition API that we are going to integrate into our project. We are going to build the backend for an program where you input a URL of an image and the webpage will display with the image and a guess for what the image is.
 
-**Update Repo**
+**Project Setup**
 ```
 git pull
 ```
-Copy lesson-3-skeleton and open it up in WebStorm or your editor of choice.  
+Copy lesson-3-skeleton and open it up in WebStorm or your text editor of choice.  
+
+We also want to enable auto-starting for our Express application using the `nodemon` package. Nodemon watches over your files for changes and restarts the process once it detects a change. This will be incredibly useful as we begin to make more and more changes to our files.
+```
+# We install nodemon as a "dev-dependency" because it's not necessary for the app to run in production.
+
+npm install --save-dev nodemon
+```
+
+We also will want to edit the "start" script in our   `package.json` to use `nodemon` instead of `node`.
+```
+"scripts": {
+  "start": "nodemon ./bin/www"
+},
+```
+This way, we can have hot-reloading by just typing `npm start`!
 
 **Sign-up for Clarifai**  
 
