@@ -20,6 +20,7 @@ Additionally, make sure you apply for the [GitHub Education Pack](https://educat
 Having a customized environment is one of the first steps to improving your workflow. We won't tell you exactly what you need to use, but these are some recommendations.
 
 * WebStorm IDE - get through [JetBrains Student](https://www.jetbrains.com/student/)
+* Text Editor: Sublime Text, VS Code, or Atom
 * Yarn (Facebook's replacement for NPM)
 * Zsh (A bit more extendable than Bash, especially paired with Oh-My-Zsh)
 
@@ -27,14 +28,16 @@ Having a customized environment is one of the first steps to improving your work
 
 ## Steps
 
-1. If you're using WebStrom, simply open it and click "Import Project", and select the root of this folder (lesson-0). It should automatically get everything set up for you.
+1. If you're using WebStorm, simply open it and click "Import Project", and select the root of this folder (lesson-0). It should automatically get everything set up for you.
     1. If you choose to use a different IDE, simply open the project folder in that IDE. 
 
 1. Open a shell and navigate to the folder `lesson-0`
 
 1. Depending on your package manager, type `yarn install` or `npm install`. This will install all required modules and dependencies.
 
-1. Run the server with `node bin/www` or with the green start button in the top right of WebStorm
+1. Run the server with `npm start` or with the green start button in the top right of WebStorm.
+
+(Webstorm Only)
 
 1. Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
     1. Test the debugger in WebStorm - go to `routes/index.js` and add a breakpoint on line 5 ( click the line number on the left)
@@ -43,8 +46,8 @@ Having a customized environment is one of the first steps to improving your work
 
 1. Navigate to [http://localhost:3000](http://localhost:3000) again - this time, it should switch over to the debug menu of WebStorm, where you can step over lines and inspect variables.
 
-## Additional Steps
-
+## Getting to know your editor
+### Webstorm
 Get acquainted with WebStorm! If you've ever used a JetBrains IDE (IDEA, PyCharm, CLion, etc), you'll be familiar with a lot of the commands. 
 
 Go through the options and look at what you're able to do. Some of the coolest ones are:
@@ -56,3 +59,12 @@ Go through the options and look at what you're able to do. Some of the coolest o
 * Code Menu Bar -> Inspect Code - Will analyze your code and show you possible bugs, issues, style issues, or spelling errors!
 
 * Command (or Win) + Alt + T - Surround selected code with a conditional (if, while, func, etc)
+
+### Sublime Text 
+Sublime Text is known for being an incredibly light-weight text editor and can handle processing a large amount of code at a time (which is useful if you accidentally open up minified JavaScript bundles). Although it lacks many of the useful features that Webstorm provides, it makes up in its speed and customizability. 
+
+* Install Package Control (https://packagecontrol.io/) - an essential package manager for Sublime
+
+* Syntax Highlighter for ES6/ES7 https://packagecontrol.io/packages/Babel
+* GitGutter (allows you to see git diffs within the editor) https://packagecontrol.io/packages/GitGutter
+* SublimeCodeIntel (smart autocomplete) https://packagecontrol.io/packages/SublimeCodeIntel
