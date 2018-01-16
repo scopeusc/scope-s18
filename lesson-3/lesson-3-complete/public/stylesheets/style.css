@@ -57,6 +57,9 @@ a {
 
 .left-col {
   flex-basis: 50%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .right-col {

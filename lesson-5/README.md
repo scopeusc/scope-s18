@@ -6,35 +6,12 @@ This lesson will add on to some of the concepts taught in Lesson 4 by adding an 
 
 ### Setting up the project
 
-Inside the `lesson-5` directory, create a new directory called `lesson-5-<your-name>` and `cd` into it.
-
-Create a Node.js project by typing the following:
-```
-npm init
-```
-You should now see a `package.json` file inside your project directory.
-
-Make sure to install Express as a dependency.
-```
-npm install --save express
-```
-
-‎
-
-### Creating the Express.js project
-
-Make sure you are in the same directory with `package.json`. You should have `express-generator` globally installed from the previous projects.
-```
-express --view=ejs
-```
-This creates an Express application in your current directory and sets `ejs` to the default view engine. More cli options can be found at https://expressjs.com/en/starter/generator.html. For simplicity's sake, we will be using this relatively barebones configuration.
+Inside the `lesson-4` directory, copy over your completed code and paste it into the lesson `lesson-5` directory. Rename it `lesson-5-<your name>`. We will be using this code as a starting point for learning about Authentication! 
+If you weren't able to complete the code from last time, use the `lesson-4-completed` as the starting point.
 
 ----------
 
 ## Part 2: Updating our User model and User POST route
-
-‎
-
 ### We need some security
 
 In the previous lesson, we logged in simply by passing in a username. Doesn't that mean anyone could log into anyone account? YES 😠. We also need to store a password on our Mongoose model.
@@ -431,7 +408,6 @@ If the request is unauthenticated (dictated by the session cookie), we will rend
 > Using the idea of Express' callback chain, and this authentication checker, can you combine the topics to create a reusable middleware to determine if someone's logged in? Also note, that callbacks in Express can actually take in 3 parameters, `res`, `req`, and `next`. `next` is specifically a way to call the next callback in the callback chain.
 
 If you want to see the answer, check out the code in `lesson-5-completed`.
-‎
 
 ‎
 
@@ -443,11 +419,15 @@ Run the app with `npm start` and check it out on `localhost:3000`.
 
 This is a modified version of the Landing Page on the previous app. First, create a user giving any set of credentials, then log them in by filling out those exact credentials on the Login panel. Upon login, you should be redirected to the Home Page again.
 
+<img src="https://i.imgur.com/BzuXuHz.png">
+
 To see if things are working, (if you're on Chrome) open up the Chrome Developer Tools (Shift + Cmd + C) and:
 
 1. Click on the tab that says **Application**
 1. Click on Cookies > localhost:3000
 1. You should see a cookie that says `connect.sid` which is how `express-session` is storing its cookies.
+
+<img src="https://i.imgur.com/Eg5mVkM.png">
 
 Now you should be able to reload on `localhost:3000/home` without getting authorization errors.
 

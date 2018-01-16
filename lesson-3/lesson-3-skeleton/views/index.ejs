@@ -5,10 +5,11 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1>Dog Haus</h1>
-    <form action="/predict.ejs" method="post">
-      <input type="url" name="image"/>
-      <input type="submit"/>
+    <h1>Dog or Not Dog</h1>
+    <form action='/predict' method='post'>
+      <p>Paste in a URL to an image and our advanced software will determine whether or not the image is of a dog or not.</p>
+      <input type='url' name='image' class='text-input'/>
+      <input type='submit' class='submit-btn' />
     </form>
   </body>
 </html>
