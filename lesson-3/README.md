@@ -194,9 +194,17 @@ router.post('/predict', (req, res, next) => {
       );
 });
 ```
-**Done with all the coding!**
+**Expand on this!**
 
-Make sure you run `npm start` and checkout localhost:3000 in your browser and make sure this all works. You can try out another model and see how it changes the API's responses if you have extra time. If you do anything cool with the API tag us on Github @scopeusc
+Make sure you run `npm start` and check out localhost:3000 in your browser and make sure this all works. You can try out another model and see how it changes the API's responses if you have extra time. If you do anything cool with the API tag us on Github @scopeusc.
+
+A list of cool free public API's are listed below:
+- https://github.com/toddmotto/public-apis
+- https://github.com/abhishekbanthia/Public-APIs
+- https://www.programmableweb.com/apis/directory
+
+A cool one to think about: https://cloud.google.com/natural-language/
+
 
 
 ##### To learn more about Clarifai go to their docs
