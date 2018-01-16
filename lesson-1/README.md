@@ -29,7 +29,7 @@ Having a customized environment is one of the first steps to improving your work
 ## Steps
 1. Before opening the project, switch to ES6. In the top level of WebStorm, go to Preferences -> Languages and Frameworks -> JavaScript. Switch to ECMAScript6.
 
-1. If you're using WebStorm, simply open it and click "Import Project", and select the root of this folder (lesson-0). It should automatically get everything set up for you.
+1. If you're using WebStorm, simply open it and click "Import Project", and select the root of this folder (lesson-1). It should automatically get everything set up for you.
 1. If you choose to use a different IDE, simply open the project folder in that IDE.
 1. Open a shell and navigate to the folder `lesson-1`
 
