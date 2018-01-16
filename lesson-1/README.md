@@ -10,8 +10,8 @@ Before we get started, we want to make sure everyone is on the same page regardi
 
 ## Required
 
-* Node (v9.x)
-* NPM (v5.x)
+* Node (v9.x) (Check with `node -v`) 
+* NPM (v5.x) (Check with `npm -v`) 
 * Browser (Chrome recommended)
 
 Additionally, make sure you apply for the [GitHub Education Pack](https://education.github.com/pack), as it'll provide a lot of tools we'll use in deployment throughout the semester. 
