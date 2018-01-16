@@ -1,4 +1,4 @@
-# Lesson 0
+# Lesson 1 - Setup
 
 Welcome to Scope - Spring 2018!
 
