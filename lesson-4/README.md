@@ -433,7 +433,7 @@ const options = { new: true };
 ```
  Pass in these three parameters to `User.findOneAndUpdate(...)` and write a corresponding `.then()` and `.catch()`! If the parameter passed to `.then()` is undefined, return `HTTP 404`. Else if it exists, wend `HTTP 204` (Success, but no content). Send `HTTP 400` in the `.catch()`. If all is good, you should see the following when you click "Adopt":
  ![enter image description here](https://puu.sh/yYCvC/03ea0391c6.png)
- ## Part 7 Profile Page and Social Page (Challenge goal)
+ ## Part 7: Profile Page and Social Page (Challenge Goal)
  ### Rendering the Profile Page
  We can now adopt dogs, but we can't see them!
  In order to do so, we will be hooking up the "Profile" link on the Navbar to the `user.ejs` template... which only means one thing – another route! Clicking on the button navigates your browser to `localhost:3000/users/<your-username>/`, hence making a `GET` request.
