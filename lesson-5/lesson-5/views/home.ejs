@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Homepage</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css' />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.bundle.min.js" integrity="sha384-VspmFJ2uqRrKr3en+IG0cIq1Cl/v/PHneDw6SQZYgrcr8ZZmZoQ3zhuGfMnSR/F2" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script>
+      function adopt(dog) {
+        if (!dog) {
+          alert('No dog selected!');
+        }
+
+        dog['imageUrl'] = dog['message'];
+
+        fetch('/api/users/adopt/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: "same-origin",
+            body: JSON.stringify({ username: Cookies.get('username'), dog }),
+          }).then((res) => {
+            if (res.status === 204) {
+              // Set the cookie to assert that we are logged in
+              alert('Successfully adopted dog!');
+            } else {
+              alert('Adoption failed!');
+            }
+          });
+      }
+
+      function navigateToProfile() {
+        const username = Cookies.get('username');
+        window.location = `/users/${username}`;
+      }
+
+      function navigateToSocial() {
+        window.location = '/social/';
+      }
+
+      function logout() {
+        fetch('/logout')
+        .then((res) => {
+          if (res.ok) {
+            Cookies.remove('username', { path: '/' });
+            window.location = '/';
+          }
+        });
+      }
+
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-primary">
+      <div>
+        <ul class="nav">
+          <li class="nav-item-active">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="navigateToProfile()">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="navigateToSocial()">Social</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="logout()">Logout</a>
+          </li>
+
+        </ul>
+
+
+      </div>
+    </nav>
+    <div class="wrapper">
+      <div class="container" style="height: 70vh;">
+        <div class="row">
+          <div class="col-4">
+            <div class="list-group" id="list-tab" role="tablist">
+              <% dogs.forEach(function(dog) { %>
+                  <a class="list-group-item list-group-item-action" id="list-<%=dog.name%>-list" data-toggle="list" href="#list-<%=dog.name%>" role="tab">
+                    <%= dog.name %>
+                  </a>
+              <% });%>
+            </div>
+          </div>
+          <div class="col-8">
+            <div class="tab-content" id="nav-tabContent">
+              <% dogs.forEach(function(dog) { %>
+                  <div class="tab-pane fade" id="list-<%=dog.name%>" role="tabpanel">
+                    <div class="card">
+                      <img class="card-img-top dog-image" src="<%=dog.message%>" alt="dog image"/>
+                      <div class="card-body">
+                        <h5 class="card-title"><%= dog.name %></h5>
+                        <p class="card-text">
+                          <strong>Birthday: </strong><%= dog.birthday %>
+                        </p>
+                        <p class="card-text">
+                          <strong>Gender: </strong><%= dog.gender %>
+                        </p>
+                        <button type="button" class="btn btn-primary" onclick="adopt(<%=JSON.stringify(dog)%>)">Adopt</button>
+                      </div>
+                    </div>
+                  </div>
+              <% });%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

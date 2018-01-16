@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Scope Lesson 4</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css' />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script>
+
+      window.onload = function() {
+        if (Cookies && Cookies.get('username')) {
+          document.getElementById('login-container').remove();
+          const el = document.createElement('div');
+          el.className = 'spinner';
+          document.body.appendChild(el);
+          window.location = '/home';
+        }
+      }
+
+      function create() {
+        const username = document.getElementById('input-username-create').value;
+        const password = document.getElementById('input-password-create').value;
+        if (!username) {
+          alert('Username cannot be empty!');
+        }
+        else if(!password) {
+          alert('Password cannot be empty!');
+        }
+        else {
+          fetch('/api/users/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+          })
+          .then((res) => {
+            if (res.ok) {
+              alert(`Created User ${username}`);
+            }
+            else {
+              res.json().then(res => alert(`Error: ${res.error}`));
+            }
+          })
+        }
+      }
+
+      function login() {
+        const username = document.getElementById('input-username-login').value;
+        const password = document.getElementById('input-password-login').value;
+        if (!username) {
+          alert('Username cannot be empty!');
+        }
+        else if(!password) {
+          alert('Password cannot be empty!');
+        }
+        else {
+          fetch('/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: "same-origin",
+            body: JSON.stringify({ username, password }),
+          })
+          .then(res => {
+            if(res.ok) {
+              Cookies.set('username', username);
+              window.location = '/home';
+            }
+          })
+        }
+      }
+    </script>
+  </head>
+  <body style="display: flex; align-items: center; justify-content: center;">
+    <div id="login-container" class="container" style="margin: 50px">
+      <div class="card login">
+        <img class="card-img-top" src="http://ghk.h-cdn.co/assets/17/30/980x490/landscape-1500925839-golden-retriever-puppy.jpg" alt="Card image cap"/>
+        <div class="card-body">
+          <h2 class="card-title text-center">
+            Dog Adoption
+          </h2>
+        </div>
+        <div class="row">
+          <div class="card-body col-6">
+            <div class="card-title text-center">
+              <strong>Create Account</strong>
+            </div>
+            <div class="container">
+              <div class="form-detail">
+                <label>Username</label>
+                <input id="input-username-create" class="form-control" placeholder="Username">
+                <label style="margin-top: 10px;">Password</label>
+                <input id="input-password-create" type="password" class="form-control" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary" onclick="create()">Create</button>
+            </div>
+          </div>
+          <div class="card-body col-6">
+            <div class="card-title text-center">
+              <strong>Login</strong>
+            </div>
+            <div class="container">
+              <div class="form-detail">
+                <label>Username</label>
+                <input id="input-username-login" class="form-control" placeholder="Username">
+                <label style="margin-top: 10px;">Password</label>
+                <input id="input-password-login" type="password" class="form-control" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary" onclick="login()">Login</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </body>
+</html>
