@@ -3,11 +3,12 @@
 This is the Scope Spring 2018 GitHub curriculum repository! Here you'll find projects and resources that will help you learn Node, Backend, and DevOps throughout the semester. Here you'll find a folder for every lesson. Within each folder is a project and a README.md that will guide you step-by-step on how to build the project for that lesson.
 
 ### Curriculum Outline
-1. Lesson 0: Environment Setup
-2. Lesson 1: TBD
-3. Lesson 2: TBD
-4. Lesson 3: TBD
-5. Lesson 4: TBD
+1. Lesson 1: Environment Setup
+2. Lesson 2: HTTP and Routes
+3. Lesson 3: Node Modules and APIs
+4. Lesson 4: Databases (MongoDB)
+5. Lesson 5: Authentication with Sessions
+6. Lesson 6: Deployment
 
 ### Using This Repo
 To use this repo properly, first follow [lesson 0](lesson-0/README.md) to get Git, Node.js, and the right environment setup on your machine.
