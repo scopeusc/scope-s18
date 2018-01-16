@@ -391,12 +391,12 @@ Once you are done adding these attributes to each dog in the array, call render 
 This code can be pretty tricky, so if there are errors definitely don't be afraid to put `console.log()` statements everywhere and see where errors are occurring. You can also look at the completed code for reference.
 
 Once completed, your homepage should look something like this!
-![enter image description here](https://i.imgur.com/NlG25AH.png)
+![](https://i.imgur.com/NlG25AH.png)
 Click on any of the list items to see the randomly generated dog! 🐕
 
 ## Part 6: Adoption!
 If you look into the `home.ejs` file, you will see the following function attached to the "Adopt" button.
-![enter image description here](https://i.imgur.com/7OCmHhN.png)
+![](https://i.imgur.com/7OCmHhN.png)
  It makes a `POST` request to `/api/users/adopt/` with a body containing the `username` and `dog`.
 
  Let's go ahead and write the route! Extract the data from the request body as usual.
@@ -432,7 +432,7 @@ The third and final parameter is the "options" object.
 const options = { new: true };
 ```
  Pass in these three parameters to `User.findOneAndUpdate(...)` and write a corresponding `.then()` and `.catch()`! If the parameter passed to `.then()` is undefined, return `HTTP 404`. Else if it exists, wend `HTTP 204` (Success, but no content). Send `HTTP 400` in the `.catch()`. If all is good, you should see the following when you click "Adopt":
- ![enter image description here](https://puu.sh/yYCvC/03ea0391c6.png)
+ ![](https://puu.sh/yYCvC/03ea0391c6.png)
  ## Part 7: Profile Page and Social Page (Challenge Goal)
  ### Rendering the Profile Page
  We can now adopt dogs, but we can't see them!
@@ -440,7 +440,7 @@ const options = { new: true };
 
 Inside `index.js`, write a handler for `/users/:username` and extract the username from the request parameters. We want to retrieve the user object from the DB and pass it into the render function. Use the `.findOne()` method to retrieve the user! If it exists, render the template - else throw an error! Remember that `.catch()` will handle any error thrown in the Promise chain.
 
-![enter image description here](https://i.imgur.com/CPbV0eD.png)
+![](https://i.imgur.com/CPbV0eD.png)
 ### Rendering the Social Page
 Since we're all using the same MongoDB instance, we can actually see **everyone's** dogs! The "Social" link on the Navbar navigates your browser to `localhost:3000/social/`, so write a route to handle the URL in `index.js`!
 Don't worry, this route is *MUCH* simpler.
@@ -451,7 +451,7 @@ router.get('/social', (req, res) => {
   User.find().then(users => res.render('social', { users }));
 });
 ```
- ![enter image description here](https://i.imgur.com/gpwUhGd.png)
+ ![](https://i.imgur.com/gpwUhGd.png)
 
 Clicking on one of the list items should redirect you to their profile!
 
