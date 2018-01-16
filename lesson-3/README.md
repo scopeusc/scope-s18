@@ -13,8 +13,13 @@ https://www.w3schools.com/nodejs/ref_modules.asp
 
 
 ## APIs and Project Setup
-More specially talking about APIs now, they can be thought of as a protocol for getting information between a source and someone who wants to use it. For example in a weather API, the developer will make a request for information. There are most commonly 2 types of HTTP requests, `GET` and `POST`. But 2 other popular ones are `PUT`, and `DELETE`, which was used in the last lesson.
-// Not sure if I should explain GET AND POST here... - AP
+More specially talking about APIs now, they can be thought of as a protocol for getting information between a source and someone who wants to use it. For example in a weather API, the developer will make a request for information. 
+
+The four common types of HTTP requests are as follows:
+* **GET** - Retrieves data from the database
+* **POST** - Creates information to your database
+* **PUT** - Updates information to your database
+* **DELETE** - Removes data from your database
 
 ### Clarifai API
 Clarifai is an image and video recognition API that we are going to integrate into our project. We are going to build the backend for an program where you input a URL of an image and the webpage will display with the image and a guess for what the image is.
