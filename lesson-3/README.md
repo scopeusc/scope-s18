@@ -9,7 +9,7 @@ You can then perform actions on the `tree` module.
 Similarly, you can include 3rd party modules and APIs using the same syntax. Using these will definitely extend the functionality of your programs.
 
 Node has a few built-in modules that you can use without needing to require. If you want to read more about them
-[https://www.w3schools.com/nodejs/ref_modules.asp]
+https://www.w3schools.com/nodejs/ref_modules.asp
 
 
 ## APIs and Project Setup
@@ -43,7 +43,7 @@ This way, we can have hot-reloading by just typing `npm start`!
 **Sign-up for Clarifai**  
 
  To get an API Key, sign-up for a free account.  
-[https://clarifai.com/developer/account/signup/]
+https://clarifai.com/developer/account/signup/
 
 **Install Clarifai**  (cd into the lesson-3-skeleton)
   
@@ -66,7 +66,7 @@ const app = new Clarifai.App({
 });
 ```
 Then open the `clarifai.json` file within the `config` directory and replace with your API key which can be found at
-[https://clarifai.com/developer/account/keys] 
+https://clarifai.com/developer/account/keys 
 When we're dealing with API keys or sensitive data, it's usually good to decouple it from your JavaScript code and keep it in a configuration file.
 
 
@@ -101,7 +101,7 @@ app.models.predict(Clarifai.GENERAL_MODEL, image)
   .then();
 ```
 We pass the *GENERAL MODEL*, which is the name for their most basic model, into the request. There are other pre-trained models that are more specific or you can train your own. Learn more here:
-[https://www.clarifai.com/models] 
+https://www.clarifai.com/models
 
 We must also pass the url of the `image` to the API.
 
@@ -194,7 +194,7 @@ router.post('/predict', (req, res, next) => {
 Make sure you run `npm start` and checkout localhost:3000 in your browser and make sure this all works. You can try out another model and see how it changes the API's responses if you have extra time. If you do anything cool with the API tag us on Github @scopeusc
 
 
-#####To learn more about Clarifai go to their docs
-[https://www.clarifai.com/developer/docs/]
+##### To learn more about Clarifai go to their docs
+https://www.clarifai.com/developer/docs/
 
 
