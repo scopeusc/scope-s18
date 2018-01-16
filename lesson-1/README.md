@@ -63,8 +63,9 @@ Go through the options and look at what you're able to do. Some of the coolest o
 ### Sublime Text 
 Sublime Text is known for being an incredibly light-weight text editor and can handle processing a large amount of code at a time (which is useful if you accidentally open up minified JavaScript bundles). Although it lacks many of the useful features that Webstorm provides, it makes up in its speed and customizability. 
 
-* Install Package Control (https://packagecontrol.io/) - an essential package manager for Sublime
-
-* Syntax Highlighter for ES6/ES7 https://packagecontrol.io/packages/Babel
+* Install Package Control (https://packagecontrol.io/) - an **essential** package manager for Sublime
+* Syntax Highlighter for ES6/ES7 https://packagecontrol.io/packages/Babel. After installing, go to the bottom right and change the syntax highlighting so it looks like this:
+![enter image description here](https://i.imgur.com/5xjTn0x.png)
 * GitGutter (allows you to see git diffs within the editor) https://packagecontrol.io/packages/GitGutter
+* Trim Trailing Whitespaces on save: https://github.com/SublimeText/TrailingSpaces
 * SublimeCodeIntel (smart autocomplete) https://packagecontrol.io/packages/SublimeCodeIntel
