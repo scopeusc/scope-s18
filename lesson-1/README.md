@@ -10,7 +10,7 @@ Before we get started, we want to make sure everyone is on the same page regardi
 
 ## Required
 
-* Node (v9.x) (Check with `node -v`)
+* Node (v9.x) (Check with `node -v`, [Update instructions][1])
 * NPM (v5.x) (Check with `npm -v`)
 * Browser (Chrome recommended)
 
@@ -69,3 +69,8 @@ Sublime Text is known for being an incredibly light-weight text editor and can h
 * GitGutter (allows you to see git diffs within the editor) https://packagecontrol.io/packages/GitGutter
 * Trim Trailing Whitespaces on save: https://github.com/SublimeText/TrailingSpaces
 * SublimeCodeIntel (smart autocomplete) https://packagecontrol.io/packages/SublimeCodeIntel
+
+
+
+[1]: https://www.solarianprogrammer.com/2016/04/29/how-to-upgrade-nodejs-mac-os-x/
+
