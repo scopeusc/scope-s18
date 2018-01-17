@@ -7,7 +7,7 @@ This lesson will introduce you to some of the core concepts of databases such as
 
 **Setting up the project**
 
-Navigate into the `lesson-4` folder. Create a Node.js project by typing the following:
+Navigate into the `lesson-4-skeleton` folder. Create a Node.js project by typing the following:
 ```javascript
 npm init
 ```
@@ -203,8 +203,8 @@ We want to create an API endpoint to create a user. Although `express-generate` 
 ```javascript
 app.use('/api/users', users)
 ```
-**Creating the endpoint**
-Since we are dealing with a `CREATE` operation, the appropriate HTTP method to use is `POST`.
+**Creating the endpoint**.
+Since we are dealing with a `CREATE` operation, the appropriate HTTP method to use is `POST`. In `users.js`
 ```javascript
 router.post('/', (req, res) => {
 
