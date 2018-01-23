@@ -223,6 +223,8 @@ Install pm2 with `npm i -g pm2`, and then start your app with `pm2 start bin/www
 
 You can customize it a lot more - GitHub hooks for automatic updating, watching the working directory and autoreload, monitor, load balance, etc. 
 
+Side note: As you may know, Node is single threaded. It's highly recommended that, for production apps, you start it in load balancer mode. This can be done with `pm2 start bin/www -i <num>`, where num is the number of processes. They'll be selected in a round robin fashion by pm2. For more information, check Further Reading below. 
+
 #### Nginx
 
 Nginx is an incredibly powerful webserver in it's own right - it allows you to create virtual hosts, change proxy settings, load balance, and much more. It is one of the most common webservers in the world, and for good reason. 
@@ -369,6 +371,12 @@ Hopefully you enjoyed your time in Scope this semester, and you won't stop learn
 The first thing I believe everyone should read after this semester is [High Performance Browser Networking](hpbn.co/#toc), which gives an in depth look at optimizing your application for performance and speed. 
 
 Good luck!
+
+# Further Reading
+
+[Scalability Lecture](https://www.youtube.com/watch?v=-W9F__D3oY4)
+
+[System Design Primer](https://github.com/donnemartin/system-design-primer)
 
 # Glossary
 
