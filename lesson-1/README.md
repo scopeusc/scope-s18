@@ -35,9 +35,14 @@ Having a customized environment is one of the first steps to improving your work
 
 1. Depending on your package manager, type `yarn install` or `npm install`. This will install all required modules and dependencies.
 
+1. Go to the top right next to the start button and click "Edit Configurations". Next click the plus sign in the top left window that pops up and select Node.js. 
+
+For js file, type "bin/www" and make sure that working directory is set to your lesson-1 folder. 
+
 1. Run the server with `npm start` or with the green start button in the top right of WebStorm.
 
 (Webstorm Only)
+
 
 1. Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
     1. Test the debugger in WebStorm - go to `routes/index.js` and add a breakpoint on line 5 ( click the line number on the left)
