@@ -7,7 +7,7 @@ const host = 'http://138.68.240.16:3000';
 
 /* GET home page. */
 router.get('/', (req, res) => {
-  return res.render('index');
+  return res.render('index', { dogs: [] });
 });
 
 /* GET Dog detail page */
