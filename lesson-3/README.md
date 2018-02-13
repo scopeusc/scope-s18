@@ -97,7 +97,7 @@ router.post('/predict', (req, res, next) => {
 ```
 Like most APIs, Clarifai requires input information before it can return you anything. 
 Clairfai requires the url of the image that was input by the user. Insert this into the body of the request.
-````
+````JS
  const image = req.body.image;
  ````
 Next we need to have the Clarifai API actually predict something. We can do this by using the `app` variable we already created. Insert this under your last line of code.
