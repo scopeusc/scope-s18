@@ -185,7 +185,11 @@ router.post('/predict', (req, res, next) => {
           }
 
           // Render our predict page and send it the concepts array, the original image URL, and the final dog or not dog verdict
-          res.render('predict', { concepts, image, verdict });
+          res.render('predict', { 
+            concepts: concepts, 
+            image: image, 
+            verdict: verdict 
+          });
         },
         function(err) {
           // If we get an error, we render the error page with the following message
