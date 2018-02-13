@@ -154,10 +154,12 @@ res.render('predict', { concepts: concepts,  image: image, verdict: verdict });
 You have now finished dealing with the response. 
 Make sure to catch any potential errors by adding an error catching function after your response function.
 ```JS
-function(err) {
-// If we get an error, we render the error page with the following message
-res.render('error', { message: 'Error trying to process that image. Likely a bad URL'});
-}
+.catch(
+  function(err) {
+    // If we get an error, we render the error page with the following message
+    res.render('error', { message: 'Error trying to process that image. Likely a bad URL'});
+  }
+);
 ```
 The whole thing should look like this:
 ```JS
@@ -186,7 +188,9 @@ router.post('/predict', (req, res, next) => {
 
           // Render our predict page and send it the concepts array, the original image URL, and the final dog or not dog verdict
           res.render('predict', { concepts: concepts, image: image, verdict: verdict });
-        },
+        }
+      )
+      .catch(
         function(err) {
           // If we get an error, we render the error page with the following message
           res.render('error', { message: 'Error trying to process that image. Likely a bad URL'});
