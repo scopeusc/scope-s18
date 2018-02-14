@@ -26,7 +26,7 @@ Note: See bottom for glossary
 
 ### VPS
 
-AWS is the largest and most fully featured cloud hosting provider currently out available. It is sligtly harder to get started with, though, so we'll be using DigitalOcean. They provide a much simpler interface - most of what we'll be doing will be true regardless of hosting provider, though. 
+AWS is the largest and most fully featured cloud hosting provider currently out available. It is slightly harder to get started with, though, so we'll be using DigitalOcean. They provide a much simpler interface - most of what we'll be doing will be true regardless of hosting provider, though. 
 
 If you want more flexibility and power in the future, though, Scope recommends using AWS. The GEP gives you $150 in credit. 
 
@@ -180,7 +180,7 @@ The first step is to clone your project. The standard is in `/var/www/` but it d
 
 For this guide, I'll be using [RandomComic](https://github.com/jonluca/RandomComic) as the app I'll be deploying. Steps might be slightly different for your app, but as long as it's a node/express app it should be fairly similar.
 
-First set up your folder hiearchy:
+First set up your folder hierarchy:
 
 ```
 sudo mkdir /var/www
