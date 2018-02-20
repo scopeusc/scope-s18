@@ -19,13 +19,14 @@ npm install --save express
 ```
 
 **Creating the Express.js project**
-Make sure you are in the same directory with `package.json`. You should have `express-generator` globally installed from the previous projects.
+Make sure you are in the same directory with `package.json`. You should have the express CLI globally installed from the previous projects. If you don't, type `npm install --g express-generator`.
 ```javascript
 express --view=ejs
 ```
-This creates an Express application in your current directory and sets `ejs` to the default view engine. More cli options can be found at https://expressjs.com/en/starter/generator.html. For simplicity's sake, we will be using this relatively barebones configuration.
+This creates an Express application in your current directory and sets `ejs` to the default view engine. In addition, it adds a bunch of dependencies to your `package.json`, so don't forget to type `npm install`! 
 
 **Copying over the views from the lesson-4-completed**
+
 Navigate into the lesson-4-completed folder and copy over the views directory into the lesson-4-skeleton, replacing over the one that express generated.
 
 ----------
@@ -167,6 +168,9 @@ mongoose.connect('mongodb://scope:scope@ds064799.mlab.com:64799/scope-lesson-4')
 ```
 You can also change all of the `var` to `const` and functions into arrow functions if it bothers you.
 
+Check to make sure that everything is up and running by navigating to `localhost:3000`! The login functionality won't work yet because we haven't implemented the users.
+![HomePage](https://i.imgur.com/MUMceKz.png)
+
 ## Part 4: Creating the user:
 ### Defining the schema
 Because we are creating a social platform, we will need to store information about a user (in this case, their username and their adopted dogs). Hence, we will need to create a schema and model to correspond with the data we would like to persist in the database.
@@ -174,7 +178,7 @@ Because we are creating a social platform, we will need to store information abo
 In the `models` folder, create a file called `user.js` and import Mongoose as a dependency.
 ```javascript
 // user.js
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 ```
 Let's begin to define our User schema. Mongoose supports a wide variety of different datatypes (you can read more about them at http://mongoosejs.com/docs/schematypes.html). For our username, we will use `String`.
 ```javascript
@@ -197,6 +201,7 @@ dogs: [{
     imageUrl: String,
     gender: String,
     birthday: Date,
+    // this is equivalent to JavaScript's built-in 'Date' object
 }],
 ```
 
@@ -204,8 +209,12 @@ dogs: [{
 **Editing the URL**
 We want to create an API endpoint to create a user. Although `express` creates a `users.js` file for you under `routes/`, we want to edit the `app.js` file to prefix its route URL with `/api`. It is good practice to prefix all of your API routes with `/api`.
 ```javascript
+// Notice that "users" is required by express automatically at the top of the file! How convenient
+
 app.use('/api/users', users);
 ```
+This is the route that will be hit by your web browser once you click on "Login" on the homepage!
+
 **Creating the endpoint**.
 Since we are dealing with a `CREATE` operation, the appropriate HTTP method to use is `POST`. In `users.js`
 ```javascript
@@ -222,7 +231,7 @@ router.post('/', (req, res) => {
 });
 
 /*
-For every single route that we create under /routes, we need to export the router, so that the app can 'require' the router module and use it.
+For every single route that we create under /routes, we need to export the router, so that the app can 'require' the router module and use it. Luckily this is already done for us.
 */
 module.exports = router;
 ```
@@ -238,7 +247,7 @@ We can't just naively create a User; we have to check whether or not a User with
 
 The `findOne` method accepts a query (a plain JavaScript object) as its first parameter and returns a Promise.
 
-We will also need to import our `User` model from our `models/` folder.
+We will also need to import our `User` model from our `models/` folder in order to be able to create an instance of one.
 ```javascript
 const User = require('../models/user');
 
@@ -253,7 +262,7 @@ When the promise is resolved in the `.then()`, the parameter passed into the fun
 
  - If the user is undefined, create a new user and call `.save()` on it and return the Promise.
  ```javascript
-
+// Will be true if a user with such a username already exists
 if (user) {
       throw `${username} already exists.`;
 }
@@ -268,9 +277,30 @@ return newUser.save();
 
 If the user was successfully created, the user JavaScript object will be passed into the parameter of the second `.then()`, which we can then send back to the client.
 ```javascript
+// User will be a JavaScript object that looks like this:
+/*
+    {
+        username: <your-username>,
+        dogs: [],
+    }
+*/
 .then(user => res.status(200).send(user))
 ```
-If you try running the application now, you'll actually be able to create a user – but you will still get errors because we haven't written created the `GET` route for `/home` in `index.js` yet!
+If you try running the application now, you'll actually be able to create a user – but you will still get errors if you try to log in because we haven't written created the `GET` route for `/home` in `index.js` yet!
+
+Let's write some code inside `index.js` to handle rendering the homepage.
+```javascript
+/* GET home page. */
+router.get('/home', (req, res) => {
+    // Express will search for the 'home.ejs' file, which
+    // requires an array called 'dogs' to be passed in as an argument.
+    // Since we don't have any dogs yet, let's just pass an empty array!
+    return res.render('home', { dogs: [] });
+});
+```
+You should see something like this! ![enter image description here](https://puu.sh/zrEPg/87c84d2cd3.png)
+Although it's nothing interesting yet, you've successfully created a database entry for your user!
+We'll expand upon this next week when we get to actually adopt dogs.
 
 ## Part 5: Rendering the Homepage
 ### Dog API
@@ -390,7 +420,7 @@ We will be using chance.js (http://chancejs.com/) to perform our random data gen
 ```
 npm install --save chance
 ```
-Back in `index.js`, add chance as a dependency, and instantiate it.
+Back in `index.js`, add chance as a dependency, and instantiate it with the 'new' keyword.
 ```JS
 const Chance = require('chance');
 const chance = new Chance();

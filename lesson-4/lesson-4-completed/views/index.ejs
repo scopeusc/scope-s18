@@ -41,6 +41,9 @@
               // Set the cookie to assert that we are logged in
               Cookies.set('username', username);
               window.location = '/home';
+            } else if (res.status === 404) {
+              alert('Route not found! Please complete the /user post route first!');
+              document.getElementById('input-username').value = '';
             } else {
               alert('Username already exists!');
               document.getElementById('input-username').value = '';
