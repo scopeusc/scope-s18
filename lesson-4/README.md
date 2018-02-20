@@ -25,6 +25,9 @@ express --view=ejs
 ```
 This creates an Express application in your current directory and sets `ejs` to the default view engine. More cli options can be found at https://expressjs.com/en/starter/generator.html. For simplicity's sake, we will be using this relatively barebones configuration.
 
+**Copying over the views from the lesson-4-completed**
+Navigate into the lesson-4-completed folder and copy over the views directory into the lesson-4-skeleton, replacing over the one that express generated.
+
 ----------
 ## Part 2: Introduction to Mongoose
 **Benefits of Mongoose**
@@ -199,16 +202,29 @@ dogs: [{
 
 ### Handling user creation
 **Editing the URL**
-We want to create an API endpoint to create a user. Although `express-generate` creates a `users.js` file for you under `routes/`, we want to edit the `app.js` file to prefix its route URL with `/api`. It is good practice to prefix all of your API routes with `/api`.
+We want to create an API endpoint to create a user. Although `express` creates a `users.js` file for you under `routes/`, we want to edit the `app.js` file to prefix its route URL with `/api`. It is good practice to prefix all of your API routes with `/api`.
 ```javascript
-app.use('/api/users', users)
+app.use('/api/users', users);
 ```
 **Creating the endpoint**.
 Since we are dealing with a `CREATE` operation, the appropriate HTTP method to use is `POST`. In `users.js`
 ```javascript
+/* We also need to import 'express' in each route file, and create an instance of express.Router();
+This "router" object will handle HTTP requests to our server.
+*/
+
+const express = require('express');
+const router = express.Router();
+
+// This route will handle all post requests to /users
 router.post('/', (req, res) => {
 
 });
+
+/*
+For every single route that we create under /routes, we need to export the router, so that the app can 'require' the router module and use it.
+*/
+module.exports = router;
 ```
 For now, let's assume that the user will `POST` a body containing just a `username` field. We learned from previous lessons that we can extract this with `req.body.username`;
 
@@ -238,7 +254,7 @@ When the promise is resolved in the `.then()`, the parameter passed into the fun
  - If the user is undefined, create a new user and call `.save()` on it and return the Promise.
  ```javascript
 
- if (user) {
+if (user) {
       throw `${username} already exists.`;
 }
 const newUser = new User(req.body);
