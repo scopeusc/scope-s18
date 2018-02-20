@@ -58,7 +58,7 @@ router.get('/users/:username', (req, res) => {
         throw `User ${username} does not exist.`;
       }
     })
-    .catch(error => res.render('error', { error }));
+    .catch(error => { console.log(error); res.render('error', { error })});
 });
 
 module.exports = router;
