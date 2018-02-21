@@ -158,7 +158,7 @@ Install mongoose.
 ```javascript
 npm install --save mongoose
 ```
-Navigate inside of `app.js` and import mongoose.
+Navigate inside of `app.js` and import mongoose somewhere near the top of your code.
 ```javascript
 const mongoose = require('mongoose');
 ```
@@ -205,6 +205,25 @@ dogs: [{
 }],
 ```
 
+Your user schema should look like the following:
+```javascript
+const userSchema = new mongoose.Schema({
+  username: String,
+  dogs: [{
+    name: String,
+    imageUrl: String,
+    gender: String,
+    birthday: Date
+  }]
+})
+```
+
+At the bottom of `user.js`, add the following code to export our defined schema as a model
+```javascript
+const User = mongoose.model('User', userSchema);
+module.exports = User;
+```
+
 ### Handling user creation
 **Editing the URL**
 We want to create an API endpoint to create a user. Although `express` creates a `users.js` file for you under `routes/`, we want to edit the `app.js` file to prefix its route URL with `/api`. It is good practice to prefix all of your API routes with `/api`.
@@ -216,7 +235,7 @@ app.use('/api/users', users);
 This is the route that will be hit by your web browser once you click on "Login" on the homepage!
 
 **Creating the endpoint**.
-Since we are dealing with a `CREATE` operation, the appropriate HTTP method to use is `POST`. In `users.js`
+Since we are dealing with a `CREATE` operation, the appropriate HTTP method to use is `POST`. In `routes/users.js`
 ```javascript
 /* We also need to import 'express' in each route file, and create an instance of express.Router();
 This "router" object will handle HTTP requests to our server.
@@ -262,33 +281,29 @@ When the promise is resolved in the `.then()`, the parameter passed into the fun
 
  - If the user is undefined, create a new user and call `.save()` on it and return the Promise.
  ```javascript
-// Will be true if a user with such a username already exists
-if (user) {
-      throw `${username} already exists.`;
-}
-const newUser = new User(req.body);
-/*
-req.body = { username: ... }
-*/
-return newUser.save();
-// .save() returns a Promise, which we act upon in the next .then()
+ User.findOne({ username })
+    .then(user => {
+      // Will be true if a user with such a username already exists
+      if (user) {
+        throw `${username} already exists.`;
+      }
+      const newUser = new User(req.body);
+      return newUser.save();
+    })
+    .then(user => res.status(200).send(user))
+    .catch(error => res.status(400).send({ error }));
  ```
  - Else, throw an error. Remember that the `.catch()` will catch **any** error thrown at any point in the Promise chain.
 
 If the user was successfully created, the user JavaScript object will be passed into the parameter of the second `.then()`, which we can then send back to the client.
+
 ```javascript
-// User will be a JavaScript object that looks like this:
-/*
-    {
-        username: <your-username>,
-        dogs: [],
-    }
-*/
 .then(user => res.status(200).send(user))
 ```
+
 If you try running the application now, you'll actually be able to create a user – but you will still get errors if you try to log in because we haven't written created the `GET` route for `/home` in `index.js` yet!
 
-Let's write some code inside `index.js` to handle rendering the homepage.
+Let's write some code inside `routes/index.js` to handle rendering the homepage.
 ```javascript
 /* GET home page. */
 router.get('/home', (req, res) => {
@@ -307,17 +322,21 @@ We'll expand upon this next week when we get to actually adopt dogs.
 The Homepage will be responsible for displaying a list of dogs which a user can adopt!
 To do so, we will be using the Dog API (https://dog.ceo/dog-api/)
 Specifically, we be using the `/api/breed/{breed name}/images/random` route to retrieve a random image of a dog.
-Because the images retrieved can be pretty large, we'll only be retrieving seven images for right now. Let's define an array of breeds at the top of the function.
+Because the images retrieved can be pretty large, we'll only be retrieving seven images for right now. Let's define an array of breeds within the function for `router.get('/home')` in `routes/index.js` 
 ```javascript
-const breeds = [
-  'maltese',
-  'terrier',
-  'pug',
-  'akita',
-  'labrador',
-  'shihtzu',
-  'pomeranian',
-];
+router.get('/home', (req, res) => {
+  const breeds = [
+    'maltese',
+    'terrier',
+    'pug',
+    'akita',
+    'labrador',
+    'shihtzu',
+    'pomeranian',
+  ];
+  
+  return res.render('home', { dogs: [] })
+});
 ```
 ### Promise.all()
 *Note: This section is by nature hard to understand. If you're having trouble, don't be afraid to reach out to one of e-board.*
@@ -369,9 +388,16 @@ Let's think about what we need to do.
 
 We can use JavaScript's built-in `.map()` method to create the array of Promises. When called on an Array, `.map()` iterates over each element and returns a brand-new Array, applying the given transformation to each element.
 
+Before you continue, make sure to `npm install --save node-fetch` and require it at the top of your file by adding the following at the top of your code.
+
 ```javascript
-// Don't forget to npm install --save node-fetch and require it at the top of your file!
-const fetchPromises = breeds.map(breed => fetch(url));
+const fetch = require('node-fetch');
+```
+
+Once you've done that, we can then set our fetchPromises 
+
+```javascript
+const fetchPromises = breeds.map(breed => fetch(`https://dog.ceo/api/breed/${breed}/images/random`));
 ```
 Next, we turn this into one Promise.
 ```JS
@@ -435,6 +461,40 @@ In the final `.then()` of `/home` route, instead of calling `console.log()`, ite
 Once you are done adding these attributes to each dog in the array, call render the "home" view, and pass in the array, `dogs`, as the second parameter.
 
 This code can be pretty tricky, so if there are errors definitely don't be afraid to put `console.log()` statements everywhere and see where errors are occurring. You can also look at the completed code for reference.
+
+To help, your final GET home page route should look like this
+```javascript
+/* GET home page. */
+router.get('/home', (req, res) => {
+
+  const breeds = [
+    'maltese',
+    'terrier',
+    'pug',
+    'akita',
+    'labrador',
+    'shihtzu',
+    'pomeranian',
+  ];
+
+  const fetchPromises = breeds.map(breed => fetch(`https://dog.ceo/api/breed/${breed}/images/random`));
+
+  Promise.all(fetchPromises)
+    .then((bodies) => {
+        const jsonPromises = bodies.map(body => body.json());
+        return Promise.all(jsonPromises);
+      })
+    .then((dogs) => {
+      dogs.forEach((dog) => {
+        dog['name'] = chance.first();
+        dog['gender'] = chance.gender();
+        dog['birthday'] = chance.birthday();
+      });
+      return res.render('home', { dogs });
+    })
+    .catch((error) => res.render('error', { error }));
+});
+```
 
 Once completed, your homepage should look something like this!
 ![](https://i.imgur.com/NlG25AH.png)
