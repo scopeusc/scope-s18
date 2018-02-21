@@ -421,7 +421,7 @@ Since `Promise.all()` returns a Promise itself, we have to write another `.then(
     .then(dogs => {
         console.log(dogs);
     })
-    .catch(...);
+    .catch((error) => res.render('error', { error }));
 ```
 If all goes well, your console should print something like this!
 ```
