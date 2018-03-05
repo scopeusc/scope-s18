@@ -457,3 +457,5 @@ Congratulations on creating a working login & authentication system!
 * https://scotch.io/tutorials/easy-node-authentication-setup-and-local
 * http://toon.io/understanding-passportjs-authentication-flow/
 * http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/
+
+* http://www.editthiscookie.com/
