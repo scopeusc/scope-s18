@@ -314,7 +314,7 @@ app.use(passport.session());
 app.use('/', index);
 ```
 
-## Part 4: Writing our Login Routes
+## Part 5: Writing our Login Routes
 ### Login
 
 Now that we have our business logic done, let's finally write our login/logout routes!
