@@ -27,7 +27,7 @@ router.get('/logout', (req, res) => {
 // Views
 router.get('/home', isLoggedIn, (req, res) => {
   if(req.isUnauthenticated()) {
-    res.render('error', {
+    return res.render('error', {
       message: 'Unauthorized Access',
       error: { status: 401 },
     });
