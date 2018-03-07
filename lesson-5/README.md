@@ -7,7 +7,7 @@ This lesson will add on to some of the concepts taught in Lesson 4 by adding an 
 ### Setting up the project
 
 Inside the `lesson-5` directory, copy over your completed code and paste it into the lesson `lesson-5-skeleton` directory (But be sure **not** to replace the **views** folder as that has been updated to factor in login). We will be using this code as a starting point for learning about Authentication! 
-If you weren't able to complete the code from last time, use the `lesson-5-skeleton` as the starting point.
+If you weren't able to complete the code from last time, use the `lesson-5-skeleton` as the starting point. When you cd into `lesson-5-skeleton` make sure to run `npm install` to install the necessary node modules
 
 ----------
 
