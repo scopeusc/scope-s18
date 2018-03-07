@@ -6,8 +6,10 @@ This lesson will add on to some of the concepts taught in Lesson 4 by adding an 
 
 ### Setting up the project
 
-Inside the `lesson-5` directory, copy over your completed code and paste it into the lesson `lesson-5-skeleton` directory (But be sure **not** to replace the **views** folder as that has been updated to factor in login). We will be using this code as a starting point for learning about Authentication!
+Inside the `lesson-5` directory, copy over your completed code from `lesson-4` and paste it into the lesson `lesson-5-skeleton` directory (But be sure **not** to replace the **views** folder as that has been updated to factor in login). We will be using this code as a starting point for learning about Authentication!
 If you weren't able to complete the code from last time, use the `lesson-5-skeleton` as the starting point. When you cd into `lesson-5-skeleton` make sure to run `npm install` to install the necessary node modules
+
+Before adding in any new code, run `npm start` to make sure that your code still works. Since we used cookies to fake login last time, we'll need to clear our cookies from out browser. You can do this by opening up the developer tools in Chrome, navigating to the "application" tab, and deleting the `username` cookie.
 
 ----------
 
