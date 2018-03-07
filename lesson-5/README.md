@@ -140,6 +140,7 @@ const store = new MongoDBStore({
 
 Copy and paste the following code to use the initialize the session middleware.
 
+**Note:** Make sure to put all of the `app.use(session(...))` code above where you put your routes
 ```JS
 app.use(session({
   secret: 'keyboard cat',
