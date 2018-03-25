@@ -88,7 +88,7 @@ Then you'll want to set SSH up with
 mkdir ~/.ssh
 chmod 700 ~/.ssh
 cd ~/.ssh
-sudo cp /root/.ssh/authorized_keys . ; sudo rm /root/.ssh/authorized_keys; sudo chown `whoami` authorized_keys; chmod 600 ~/.ssh/authorized_keys
+sudo cp /root/.ssh/authorized_keys . && sudo rm /root/.ssh/authorized_keys && sudo chown `whoami` authorized_keys && sudo chmod 600 ~/.ssh/authorized_keys
 ```
 
 Let's go over what this is doing - it creates the ssh directory, and sets the correct permissions. Then we enter it, copy the ssh key we originally set up for root and delete it for root, then take ownership of the file. Finally, we change the permissions of the actual authorized keys file.
