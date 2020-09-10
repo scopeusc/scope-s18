@@ -14,7 +14,7 @@
     "express": "~4.15.5",
     "mongoose": "^5.0.0-rc1",
     "morgan": "~1.9.0",
-    "node-fetch": "^1.7.3",
+    "node-fetch": "^2.6.1",
     "serve-favicon": "~2.4.5"
   },
   "devDependencies": {
